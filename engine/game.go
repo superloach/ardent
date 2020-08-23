@@ -1,19 +1,22 @@
 package engine
 
-// Backend flag type
-type Backend byte
+// Game is an engine instance.
+type Game interface {
+	// Run starts running the game.
+	Run() error
 
-// Available backends
-const (
-	EBITEN Backend = 1 << iota
-)
+	// IsFullscreen returns the fullscreen state of the game.
+	IsFullscreen() bool
 
-// Game is an instantiated
-// engine instance.
-type Game struct {
-	backend Backend
-}
+	// SetFullscreen sets the fullscreen state of the game.
+	SetFullscreen(bool)
 
-func NewGame(backend Backend) *Instance {
-	return &Game{backend: backend}
+	// IsVsync returns the vsync state of the game.
+	IsVsync() bool
+
+	// SetVsync sets the vsync state of the game.
+	SetVsync(bool)
+
+	// IsFocused returns the focused state of the game.
+	IsFocused() bool
 }
