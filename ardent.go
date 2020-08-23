@@ -17,14 +17,12 @@ const (
 func NewGame(
 	backend Backend,
 	tickFunc func(),
-	drawFunc func(),
 	layoutFunc func(int, int) (int, int),
 ) engine.Game {
 	switch backend {
 	case EBITEN:
 		return ebiten.NewGame(
 			tickFunc,
-			drawFunc,
 			layoutFunc,
 		)
 	default:

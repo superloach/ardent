@@ -13,7 +13,7 @@ type Image interface {
 	Scale(float64, float64)
 
 	// Rotate sets the rotation
-	// in degrees relative to the origin.
+	// in radians relative to the origin.
 	Rotate(float64)
 
 	// Size returns the size of the image.

@@ -1,25 +1,30 @@
 package ebiten
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"github.com/hajimehoshi/ebiten"
+	"github.com/split-cube-studios/ardent/engine"
+	"github.com/split-cube-studios/ardent/internal/ebiten/render"
+)
 
 // Game is an ebiten implementation
 // of engine.Game.
 type Game struct {
 	tickFunc   func()
-	drawFunc   func()
 	layoutFunc func(int, int) (int, int)
+
+	c         *component
+	renderers []engine.Renderer
 }
 
 // NewGame returns an instantiated game.
 func NewGame(
 	tickFunc func(),
-	drawFunc func(),
 	layoutFunc func(int, int) (int, int),
 ) *Game {
 	return &Game{
 		tickFunc:   tickFunc,
-		drawFunc:   drawFunc,
 		layoutFunc: layoutFunc,
+		c:          new(component),
 	}
 }
 
@@ -32,6 +37,16 @@ func (g *Game) Run() error {
 	ebiten.SetRunnableInBackground(true)
 
 	return ebiten.RunGame(g)
+}
+
+// Component returns an ebiten component factory.
+func (g Game) Component() engine.Component {
+	return g.c
+}
+
+// AddRenderer adds a renderer to the draw stack.
+func (g *Game) AddRenderer(renderer ...engine.Renderer) {
+	g.renderers = append(g.renderers, renderer...)
 }
 
 // Layout is called when the window resizes.
@@ -47,7 +62,9 @@ func (g *Game) Update(screen *ebiten.Image) error {
 		return nil
 	}
 
-	g.drawFunc()
+	for _, renderer := range g.renderers {
+		renderer.(*render.Renderer).Draw(screen)
+	}
 
 	return nil
 }
