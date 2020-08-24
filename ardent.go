@@ -3,6 +3,7 @@ package ardent
 import (
 	"github.com/split-cube-studios/ardent/engine"
 	"github.com/split-cube-studios/ardent/internal/ebiten"
+	"github.com/split-cube-studios/ardent/internal/headless"
 )
 
 // Backend flag type
@@ -10,7 +11,8 @@ type Backend byte
 
 // Backend options
 const (
-	EBITEN Backend = 1 << iota
+	HEADLESS Backend = 1 << iota
+	EBITEN
 )
 
 // NewGame creates a new game instance for a given backend.
@@ -20,6 +22,11 @@ func NewGame(
 	layoutFunc func(int, int) (int, int),
 ) engine.Game {
 	switch backend {
+	case HEADLESS:
+		return headless.NewGame(
+			tickFunc,
+			nil,
+		)
 	case EBITEN:
 		return ebiten.NewGame(
 			tickFunc,
