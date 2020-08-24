@@ -3,7 +3,6 @@ package ebiten
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/split-cube-studios/ardent/engine"
-	"github.com/split-cube-studios/ardent/internal/ebiten/render"
 )
 
 // Game is an ebiten implementation
@@ -63,7 +62,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	}
 
 	for _, renderer := range g.renderers {
-		renderer.(*render.Renderer).Draw(screen)
+		renderer.(*Renderer).draw(screen)
 	}
 
 	return nil
