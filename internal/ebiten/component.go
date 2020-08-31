@@ -5,6 +5,7 @@ import (
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
+	"io"
 	"os"
 
 	"github.com/hajimehoshi/ebiten"
@@ -26,6 +27,21 @@ func (c component) NewImageFromPath(path string) (engine.Image, error) {
 	}
 
 	return c.NewImageFromImage(img), nil
+}
+
+func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open asset path: %w", err)
+	}
+	defer f.Close()
+
+	a := new(Asset)
+	if _, err = io.Copy(a, f); err != nil {
+		return nil, fmt.Errorf("Failed to decode asset: %w", err)
+	}
+
+	return a.ToImage()
 }
 
 func (c component) NewImageFromImage(img image.Image) engine.Image {
