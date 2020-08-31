@@ -8,6 +8,8 @@ import (
 var (
 	renderer engine.Renderer
 	image    engine.Image
+
+	x float64
 )
 
 func main() {
@@ -17,8 +19,8 @@ func main() {
 		ardent.EBITEN,
 		// tick function
 		func() {
-			image.Translate(1, 0)
-			renderer.AddImage(image)
+			x++
+			image.Translate(x, 0)
 		},
 		// layout function
 		func(ow, oh int) (int, int) {
@@ -32,6 +34,9 @@ func main() {
 	// create new renderer and image
 	renderer = component.NewRenderer()
 	image, _ = component.NewImageFromPath("ebin.jpeg")
+
+	// add image to renderer
+	renderer.AddImage(image)
 
 	// add renderer to game and start game
 	game.AddRenderer(renderer)

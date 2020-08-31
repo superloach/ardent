@@ -15,22 +15,30 @@ func (r *Renderer) AddImage(images ...engine.Image) {
 	r.imgs = append(r.imgs, images...)
 }
 
+// RemoveImage removes images from the draw stack.
+func (r *Renderer) RemoveImage(images ...engine.Image) {
+	for _, remove := range images {
+		for i, img := range r.imgs {
+			if img == remove {
+				r.imgs[i] = r.imgs[len(r.imgs)-1]
+				r.imgs[len(r.imgs)-1] = nil
+				r.imgs = r.imgs[:len(r.imgs)-1]
+				break
+			}
+		}
+	}
+}
+
 // draw renders all images in the draw stack.
 func (r *Renderer) draw(screen *ebiten.Image) {
 	for _, img := range r.imgs {
-		screen.DrawImage(img.(*Image).img, img.(*Image).op)
-	}
+		eimg := img.(*Image)
+		op := new(ebiten.DrawImageOptions)
 
-	r.purgeBuffer(false)
-}
+		op.GeoM.Translate(eimg.tx, eimg.ty)
+		op.GeoM.Scale(eimg.sx, eimg.sy)
+		op.GeoM.Rotate(eimg.d)
 
-// purgeBuffer clears the image buffer.
-// A bool can be passed to optionally reallocate
-// the buffer, or to simply reslice it.
-func (r *Renderer) purgeBuffer(realloc bool) {
-	if realloc {
-		r.imgs = make([]engine.Image, 0)
-		return
+		screen.DrawImage(eimg.img, op)
 	}
-	r.imgs = r.imgs[:0]
 }

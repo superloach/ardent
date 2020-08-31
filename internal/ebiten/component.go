@@ -30,7 +30,11 @@ func (c component) NewImageFromPath(path string) (engine.Image, error) {
 
 func (c component) NewImageFromImage(img image.Image) engine.Image {
 	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterDefault)
-	return &Image{img: eimg, op: new(ebiten.DrawImageOptions)}
+	return &Image{
+		img: eimg,
+		sx:  1,
+		sy:  1,
+	}
 }
 
 func (c component) NewRenderer() engine.Renderer {
