@@ -14,6 +14,21 @@ import (
 
 type component struct{}
 
+func (c component) NewAssetFromPath(path string) (engine.Asset, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to open asset path: %w", err)
+	}
+	defer f.Close()
+
+	a := new(Asset)
+	if _, err = io.Copy(a, f); err != nil {
+		return nil, fmt.Errorf("Failed to decode asset: %w", err)
+	}
+
+	return a, nil
+}
+
 func (c component) NewImageFromPath(path string) (engine.Image, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -30,15 +45,9 @@ func (c component) NewImageFromPath(path string) (engine.Image, error) {
 }
 
 func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
-	f, err := os.Open(path)
+	a, err := c.NewAssetFromPath(path)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to open asset path: %w", err)
-	}
-	defer f.Close()
-
-	a := new(Asset)
-	if _, err = io.Copy(a, f); err != nil {
-		return nil, fmt.Errorf("Failed to decode asset: %w", err)
+		return nil, err
 	}
 
 	return a.ToImage()
@@ -51,6 +60,15 @@ func (c component) NewImageFromImage(img image.Image) engine.Image {
 		sx:  1,
 		sy:  1,
 	}
+}
+
+func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
+	a, err := c.NewAssetFromPath(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return a.ToAtlas()
 }
 
 func (c component) NewRenderer() engine.Renderer {

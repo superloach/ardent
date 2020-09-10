@@ -2,12 +2,6 @@ package main
 
 import (
 	"github.com/split-cube-studios/ardent"
-	"github.com/split-cube-studios/ardent/engine"
-)
-
-var (
-	image engine.Image
-	x, y  float64
 )
 
 func main() {
@@ -17,8 +11,6 @@ func main() {
 		ardent.EBITEN,
 		// tick function
 		func() {
-			x++
-			image.Translate(x, y)
 		},
 		// layout function
 		func(ow, oh int) (int, int) {
@@ -30,11 +22,7 @@ func main() {
 	component := game.Component()
 
 	// create new renderer and image
-	renderer := component.NewRenderer()
-	image, _ = component.NewImageFromPath("ebin.jpeg")
-
-	// add image to renderer
-	renderer.AddImage(image)
+	renderer = component.NewRenderer()
 
 	// add renderer to game and start game
 	game.AddRenderer(renderer)
