@@ -21,27 +21,27 @@ type Asset struct {
 	Type AssetType
 
 	Img      image.Image
-	SheetMap map[string]AtlasRegion
+	AtlasMap map[string]AtlasRegion
 }
 
 const invalidAssetType = "Invalid asset type: %X"
 
 func NewAsset() *Asset {
 	return &Asset{
-		SheetMap: make(map[string]SheetRegion, 0),
+		AtlasMap: make(map[string]AtlasRegion, 0),
 	}
 }
 
 func (a *Asset) MarshalBinary() ([]byte, error) {
 	buf := new(bytes.Buffer)
 
-	buf.WriteByte(a.Type)
+	buf.WriteByte(byte(a.Type))
 
 	switch a.Type {
 	case AssetTypeAtlas:
-		buf.WriteByte(byte(len(a.SheetMap)))
+		buf.WriteByte(byte(len(a.AtlasMap)))
 
-		for k, v := range a.SheetMap {
+		for k, v := range a.AtlasMap {
 			buf.WriteString(k)
 			buf.WriteByte(0)
 
@@ -68,13 +68,13 @@ func (a *Asset) MarshalBinary() ([]byte, error) {
 		}
 	}
 
-	return buf, nil
+	return buf.Bytes(), nil
 }
 
 func (a *Asset) UnmarshalBinary(data []byte) error {
 	buf := bytes.NewBuffer(data)
 
-	t, err := bytes.ReadByte()
+	t, err := buf.ReadByte()
 	if err != nil {
 		return err
 	}
@@ -93,14 +93,14 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 			}
 
 			regData := make([]byte, 8)
-			if n, err := buf.Read(reg); n != len(reg) {
+			if n, err := buf.Read(regData); n != len(regData) {
 				if err != nil {
 					return err
 				}
-				return fmt.Errorf("Expected %d bytes, got %d", len(reg), n)
+				return fmt.Errorf("Expected %d bytes, got %d", len(regData), n)
 			}
 
-			a.SheetMap[k] = SheetRegion{
+			a.AtlasMap[k] = AtlasRegion{
 				X: binary.LittleEndian.Uint16(regData[:2]),
 				Y: binary.LittleEndian.Uint16(regData[2:4]),
 				W: binary.LittleEndian.Uint16(regData[4:6]),
@@ -119,7 +119,7 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 		return nil
 	}
 
-	a.img, err = png.Decode(t)
+	a.Img, err = png.Decode(buf)
 
 	return err
 }
