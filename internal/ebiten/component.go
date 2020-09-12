@@ -5,7 +5,7 @@ import (
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
-	"io"
+	"io/ioutil"
 	"os"
 
 	"github.com/hajimehoshi/ebiten"
@@ -22,11 +22,12 @@ func (c component) NewAssetFromPath(path string) (engine.Asset, error) {
 	defer f.Close()
 
 	a := new(Asset)
-	if _, err = io.Copy(a, f); err != nil {
+	d, err := ioutil.ReadAll(f)
+	if err != nil {
 		return nil, fmt.Errorf("Failed to decode asset: %w", err)
 	}
 
-	return a, nil
+	return a, a.UnmarshalBinary(d)
 }
 
 func (c component) NewImageFromPath(path string) (engine.Image, error) {
@@ -50,7 +51,7 @@ func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
 		return nil, err
 	}
 
-	return a.ToImage()
+	return a.ToImage(), nil
 }
 
 func (c component) NewImageFromImage(img image.Image) engine.Image {
@@ -68,7 +69,7 @@ func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
 		return nil, err
 	}
 
-	return a.ToAtlas()
+	return a.ToAtlas(), nil
 }
 
 func (c component) NewRenderer() engine.Renderer {

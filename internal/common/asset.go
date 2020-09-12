@@ -35,9 +35,12 @@ func NewAsset() *Asset {
 func (a *Asset) MarshalBinary() ([]byte, error) {
 	buf := new(bytes.Buffer)
 
+	buf.WriteString("ardent")
+	buf.WriteByte(0)
 	buf.WriteByte(byte(a.Type))
 
 	switch a.Type {
+	case AssetTypeImage:
 	case AssetTypeAtlas:
 		buf.WriteByte(byte(len(a.AtlasMap)))
 
@@ -46,10 +49,10 @@ func (a *Asset) MarshalBinary() ([]byte, error) {
 			buf.WriteByte(0)
 
 			data := make([]byte, 8)
-			binary.LittleEndian.PutUint16(data, v.X)
-			binary.LittleEndian.PutUint16(data, v.Y)
-			binary.LittleEndian.PutUint16(data, v.W)
-			binary.LittleEndian.PutUint16(data, v.H)
+			binary.LittleEndian.PutUint16(data[:2], v.X)
+			binary.LittleEndian.PutUint16(data[2:4], v.Y)
+			binary.LittleEndian.PutUint16(data[4:6], v.W)
+			binary.LittleEndian.PutUint16(data[6:8], v.H)
 
 			buf.Write(data)
 		}
@@ -74,12 +77,23 @@ func (a *Asset) MarshalBinary() ([]byte, error) {
 func (a *Asset) UnmarshalBinary(data []byte) error {
 	buf := bytes.NewBuffer(data)
 
+	magic, err := buf.ReadString(0)
+	if err != nil {
+		return err
+	}
+
+	if magic[:len(magic)-1] != "ardent" {
+		return fmt.Errorf("Invalid filetype")
+	}
+
 	t, err := buf.ReadByte()
 	if err != nil {
 		return err
 	}
 
-	switch AssetType(t) {
+	a.Type = AssetType(t)
+	switch a.Type {
+	case AssetTypeImage:
 	case AssetTypeAtlas:
 		count, err := buf.ReadByte()
 		if err != nil {
@@ -100,21 +114,20 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 				return fmt.Errorf("Expected %d bytes, got %d", len(regData), n)
 			}
 
-			a.AtlasMap[k] = AtlasRegion{
+			a.AtlasMap[k[:len(k)-1]] = AtlasRegion{
 				X: binary.LittleEndian.Uint16(regData[:2]),
 				Y: binary.LittleEndian.Uint16(regData[2:4]),
 				W: binary.LittleEndian.Uint16(regData[4:6]),
 				H: binary.LittleEndian.Uint16(regData[6:8]),
 			}
 		}
-
 	case AssetTypeAnimation:
 	case AssetTypeSound:
 	default:
 		panic(fmt.Sprintf(invalidAssetType, t))
 	}
 
-	if AssetType(t) == AssetTypeSound {
+	if a.Type == AssetTypeSound {
 		// TODO
 		return nil
 	}

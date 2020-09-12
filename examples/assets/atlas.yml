@@ -1,0 +1,19 @@
+version: 1.0
+type: atlas
+atlas:
+  stripes:
+    x: 0
+    y: 0
+    w: 128
+    h: 128
+  swirls:
+    x: 128
+    y: 0
+    w: 128
+    h: 128
+  blocks:
+    x: 0
+    y: 128
+    w: 128
+    h: 128
+

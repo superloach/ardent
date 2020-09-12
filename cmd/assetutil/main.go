@@ -67,7 +67,6 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		d = append([]byte("ardent"), d...)
 
 		if err := ioutil.WriteFile(
 			strings.Replace(conf.filepath, ".png", ".asset", 1),

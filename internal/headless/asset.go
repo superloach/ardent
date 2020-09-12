@@ -6,10 +6,10 @@ import (
 
 type Asset struct{}
 
-func (a Asset) ToImage() (engine.Image, error) {
-	return new(Image), nil
+func (a Asset) ToImage() engine.Image {
+	return new(Image)
 }
 
-func (a Asset) ToAtlas() (engine.Atlas, error) {
-	return new(Atlas), nil
+func (a Asset) ToAtlas() engine.Atlas {
+	return new(Atlas)
 }
