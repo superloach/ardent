@@ -22,7 +22,7 @@ func main() {
 
 	// create new renderer and image
 	renderer := component.NewRenderer()
-	image, _ := component.NewImageFromAssetPath("../assets/scs.asset")
+	image, _ := component.NewImageFromAssetPath("scs.asset")
 
 	// add image to renderer
 	renderer.AddImage(image)

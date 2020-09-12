@@ -26,7 +26,7 @@ func main() {
 	renderer := component.NewRenderer()
 
 	// create new atlas from asset file
-	atlas, _ := component.NewAtlasFromAssetPath("../assets/atlas.asset")
+	atlas, _ := component.NewAtlasFromAssetPath("atlas.asset")
 
 	// get atlas subimages
 	stripes := atlas.GetImage("stripes")
