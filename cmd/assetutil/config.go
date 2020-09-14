@@ -20,6 +20,15 @@ type config struct {
 		W int `yml:"w"`
 		H int `yml:"h"`
 	} `yml:"atlas,omitempty"`
+
+	FrameWidth  int `yml:"framewidth,omitempty"`
+	FrameHeight int `yml:"frameheight,omitempty"`
+
+	Animations map[string]struct {
+		Fps   int `yml:"fps"`
+		Start int `yml:"start"`
+		End   int `yml:"end"`
+	} `yml:"animations,omitempty"`
 }
 
 func (c config) toAsset() (*common.Asset, error) {
@@ -36,6 +45,18 @@ func (c config) toAsset() (*common.Asset, error) {
 				Y: uint16(v.Y),
 				W: uint16(v.W),
 				H: uint16(v.H),
+			}
+		}
+	case "animation":
+		asset.Type = common.AssetTypeAnimation
+		asset.AnimWidth = uint16(c.FrameWidth)
+		asset.AnimHeight = uint16(c.FrameHeight)
+
+		for k, v := range c.Animations {
+			asset.AnimationMap[k] = common.Animation{
+				Fps:   uint16(v.Fps),
+				Start: uint16(v.Start),
+				End:   uint16(v.End),
 			}
 		}
 	default:

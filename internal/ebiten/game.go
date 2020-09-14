@@ -57,6 +57,10 @@ func (g Game) Layout(ow, oh int) (int, int) {
 func (g *Game) Update(screen *ebiten.Image) error {
 	g.tickFunc()
 
+	for _, renderer := range g.renderers {
+		renderer.(*Renderer).tick()
+	}
+
 	if ebiten.IsDrawingSkipped() {
 		return nil
 	}

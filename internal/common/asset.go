@@ -22,13 +22,17 @@ type Asset struct {
 
 	Img      image.Image
 	AtlasMap map[string]AtlasRegion
+
+	AnimWidth, AnimHeight uint16
+	AnimationMap          map[string]Animation
 }
 
 const invalidAssetType = "Invalid asset type: %X"
 
 func NewAsset() *Asset {
 	return &Asset{
-		AtlasMap: make(map[string]AtlasRegion, 0),
+		AtlasMap:     make(map[string]AtlasRegion, 0),
+		AnimationMap: make(map[string]Animation, 0),
 	}
 }
 
@@ -58,7 +62,25 @@ func (a *Asset) MarshalBinary() ([]byte, error) {
 		}
 
 	case AssetTypeAnimation:
-		// TODO
+		buf.WriteByte(byte(len(a.AnimationMap)))
+
+		data := make([]byte, 4)
+		binary.LittleEndian.PutUint16(data[:2], a.AnimWidth)
+		binary.LittleEndian.PutUint16(data[2:4], a.AnimHeight)
+
+		buf.Write(data)
+
+		for k, v := range a.AnimationMap {
+			buf.WriteString(k)
+			buf.WriteByte(0)
+
+			data = make([]byte, 6)
+			binary.LittleEndian.PutUint16(data[:2], v.Fps)
+			binary.LittleEndian.PutUint16(data[2:4], v.Start)
+			binary.LittleEndian.PutUint16(data[4:6], v.End)
+
+			buf.Write(data)
+		}
 	case AssetTypeSound:
 		// TODO
 	default:
@@ -121,7 +143,45 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 				H: binary.LittleEndian.Uint16(regData[6:8]),
 			}
 		}
+
 	case AssetTypeAnimation:
+		count, err := buf.ReadByte()
+		if err != nil {
+			return err
+		}
+
+		animSize := make([]byte, 4)
+		if n, err := buf.Read(animSize); n != len(animSize) {
+			if err != nil {
+				return err
+			}
+			return fmt.Errorf("Expected %d bytes, got %d", len(animSize), n)
+		}
+
+		a.AnimWidth = binary.LittleEndian.Uint16(animSize[:2])
+		a.AnimHeight = binary.LittleEndian.Uint16(animSize[2:4])
+
+		for i := 0; i < int(count); i++ {
+			k, err := buf.ReadString(0)
+			if err != nil {
+				return err
+			}
+
+			animData := make([]byte, 6)
+			if n, err := buf.Read(animData); n != len(animData) {
+				if err != nil {
+					return err
+				}
+				return fmt.Errorf("Expected %d bytes, go %d", len(animData), n)
+			}
+
+			a.AnimationMap[k[:len(k)-1]] = Animation{
+				Fps:   binary.LittleEndian.Uint16(animData[:2]),
+				Start: binary.LittleEndian.Uint16(animData[2:4]),
+				End:   binary.LittleEndian.Uint16(animData[4:6]),
+			}
+		}
+
 	case AssetTypeSound:
 	default:
 		panic(fmt.Sprintf(invalidAssetType, t))

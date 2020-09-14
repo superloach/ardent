@@ -72,6 +72,15 @@ func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
 	return a.ToAtlas(), nil
 }
 
+func (c component) NewAnimationFromAssetPath(path string) (engine.Animation, error) {
+	a, err := c.NewAssetFromPath(path)
+	if err != nil {
+		return nil, err
+	}
+
+	return a.ToAnimation(), nil
+}
+
 func (c component) NewRenderer() engine.Renderer {
 	return new(Renderer)
 }

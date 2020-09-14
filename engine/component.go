@@ -11,5 +11,7 @@ type Component interface {
 
 	NewAtlasFromAssetPath(string) (Atlas, error)
 
+	NewAnimationFromAssetPath(string) (Animation, error)
+
 	NewRenderer() Renderer
 }

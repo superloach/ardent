@@ -15,30 +15,50 @@ func (r *Renderer) AddImage(images ...engine.Image) {
 	r.imgs = append(r.imgs, images...)
 }
 
-// RemoveImage removes images from the draw stack.
-func (r *Renderer) RemoveImage(images ...engine.Image) {
-	for _, remove := range images {
-		for i, img := range r.imgs {
-			if img == remove {
-				r.imgs[i] = r.imgs[len(r.imgs)-1]
-				r.imgs[len(r.imgs)-1] = nil
-				r.imgs = r.imgs[:len(r.imgs)-1]
-				break
-			}
+func (r *Renderer) tick() {
+	for _, img := range r.imgs {
+		anim, ok := img.(*Animation)
+		if ok {
+			anim.tick()
 		}
 	}
 }
 
 // draw renders all images in the draw stack.
 func (r *Renderer) draw(screen *ebiten.Image) {
+	var (
+		eimg   *ebiten.Image
+		tx, ty float64
+		sx, sy float64
+		d      float64
+	)
+
 	for _, img := range r.imgs {
-		eimg := img.(*Image)
+		switch img.(type) {
+		case *Image:
+			i := img.(*Image)
+			eimg = i.img
+			tx, ty = i.tx, i.ty
+			sx, sy = i.sx, i.sy
+			d = i.d
+
+		case *Animation:
+			a := img.(*Animation)
+			eimg = a.getFrame()
+			tx, ty = a.tx, a.ty
+			sx, sy = a.sx, a.sy
+			d = a.d
+
+		default:
+			panic("Invalid image type")
+		}
+
 		op := new(ebiten.DrawImageOptions)
 
-		op.GeoM.Translate(eimg.tx, eimg.ty)
-		op.GeoM.Scale(eimg.sx, eimg.sy)
-		op.GeoM.Rotate(eimg.d)
+		op.GeoM.Translate(tx, ty)
+		op.GeoM.Scale(sx, sy)
+		op.GeoM.Rotate(d)
 
-		screen.DrawImage(eimg.img, op)
+		screen.DrawImage(eimg, op)
 	}
 }

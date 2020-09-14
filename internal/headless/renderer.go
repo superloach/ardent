@@ -11,8 +11,3 @@ type Renderer struct{}
 func (r Renderer) AddImage(images ...engine.Image) {
 	// NOOP
 }
-
-// RemoveImage removes images from the draw stack.
-func (r Renderer) RemoveImage(iamges ...engine.Image) {
-	// NOOP
-}

@@ -28,6 +28,10 @@ func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
 	return new(Atlas), nil
 }
 
+func (c component) NewAnimationFromAssetPath(path string) (engine.Animation, error) {
+	return new(Animation), nil
+}
+
 func (c component) NewRenderer() engine.Renderer {
 	return new(Renderer)
 }

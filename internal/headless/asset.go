@@ -13,3 +13,7 @@ func (a Asset) ToImage() engine.Image {
 func (a Asset) ToAtlas() engine.Atlas {
 	return new(Atlas)
 }
+
+func (a Asset) ToAnimation() engine.Animation {
+	return new(Animation)
+}
