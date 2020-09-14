@@ -24,4 +24,6 @@ type Game interface {
 	SetVsync(bool)
 	// IsFocused returns the focused state of the game.
 	IsFocused() bool
+
+	Input
 }

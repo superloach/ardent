@@ -9,6 +9,8 @@ import (
 type Game struct {
 	tickFunc func()
 	c        *component
+
+	Input
 }
 
 // NewGame returns an instantiated game.

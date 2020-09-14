@@ -13,6 +13,8 @@ type Game struct {
 
 	c         *component
 	renderers []engine.Renderer
+
+	Input
 }
 
 // NewGame returns an instantiated game.
