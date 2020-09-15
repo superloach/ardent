@@ -44,3 +44,7 @@ func (c component) NewIsoRenderer() engine.IsoRenderer {
 func (c component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.Image) engine.Tilemap {
 	return new(common.Tilemap)
 }
+
+func (c component) NewCamera() engine.Camera {
+	return new(common.Camera)
+}

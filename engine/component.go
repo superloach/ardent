@@ -17,4 +17,6 @@ type Component interface {
 	NewIsoRenderer() IsoRenderer
 
 	NewTilemap(int, [2][][]int, map[int]Image) Tilemap
+
+	NewCamera() Camera
 }

@@ -7,12 +7,17 @@ import (
 
 // Renderer is a simple ebiten renderer.
 type Renderer struct {
-	imgs []engine.Image
+	imgs   []engine.Image
+	camera engine.Camera
 }
 
 // AddImage adds images to the draw stack.
 func (r *Renderer) AddImage(images ...engine.Image) {
 	r.imgs = append(r.imgs, images...)
+}
+
+func (r *Renderer) SetCamera(camera engine.Camera) {
+	r.camera = camera
 }
 
 func (r *Renderer) tick() {
@@ -31,7 +36,12 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 		tx, ty float64
 		sx, sy float64
 		d      float64
+		cx, cy float64
 	)
+
+	if r.camera != nil {
+		cx, cy = r.camera.Position()
+	}
 
 	for _, img := range r.imgs {
 		switch img.(type) {
@@ -55,7 +65,7 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 		op := new(ebiten.DrawImageOptions)
 
-		op.GeoM.Translate(tx, ty)
+		op.GeoM.Translate(tx-cx, ty-cy)
 		op.GeoM.Scale(sx, sy)
 		op.GeoM.Rotate(d)
 

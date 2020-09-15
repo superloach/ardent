@@ -6,4 +6,6 @@ type Renderer interface {
 	// to the renderer's draw stack.
 	// Images are drawn in the order they are added.
 	AddImage(...Image)
+
+	SetCamera(Camera)
 }

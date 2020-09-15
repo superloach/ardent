@@ -11,3 +11,7 @@ type Renderer struct{}
 func (r Renderer) AddImage(images ...engine.Image) {
 	// NOOP
 }
+
+func (r Renderer) SetCamera(camera engine.Camera) {
+
+}
