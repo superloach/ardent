@@ -11,8 +11,9 @@ type Game struct {
 	tickFunc   func()
 	layoutFunc func(int, int) (int, int)
 
-	c         *component
-	renderers []engine.Renderer
+	c            *component
+	isoRenderers []engine.IsoRenderer
+	renderers    []engine.Renderer
 
 	Input
 }
@@ -50,6 +51,10 @@ func (g *Game) AddRenderer(renderer ...engine.Renderer) {
 	g.renderers = append(g.renderers, renderer...)
 }
 
+func (g *Game) AddIsoRenderer(isoRenderer ...engine.IsoRenderer) {
+	g.isoRenderers = append(g.isoRenderers, isoRenderer...)
+}
+
 // Layout is called when the window resizes.
 func (g Game) Layout(ow, oh int) (int, int) {
 	return g.layoutFunc(ow, oh)
@@ -65,6 +70,10 @@ func (g *Game) Update(screen *ebiten.Image) error {
 
 	if ebiten.IsDrawingSkipped() {
 		return nil
+	}
+
+	for _, isoRenderer := range g.isoRenderers {
+		isoRenderer.(*IsoRenderer).draw(screen)
 	}
 
 	for _, renderer := range g.renderers {

@@ -13,7 +13,7 @@ type Input struct {
 }
 
 func (i *Input) IsAnyKeyPressed() bool {
-	for _, v := range commonToEbitenKey {
+	for _, v := range toEbitenKey {
 		if ebiten.IsKeyPressed(v) {
 			return true
 		}
@@ -22,7 +22,7 @@ func (i *Input) IsAnyKeyPressed() bool {
 }
 
 func (i *Input) IsAnyKeyJustPressed() bool {
-	for _, v := range commonToEbitenKey {
+	for _, v := range toEbitenKey {
 		if inpututil.IsKeyJustPressed(v) {
 			return true
 		}
@@ -31,27 +31,27 @@ func (i *Input) IsAnyKeyJustPressed() bool {
 }
 
 func (i *Input) IsKeyPressed(k int) bool {
-	return ebiten.IsKeyPressed(commonToEbitenKey[k])
+	return ebiten.IsKeyPressed(toEbitenKey[k])
 }
 
 func (i *Input) IsKeyJustPressed(k int) bool {
-	return inpututil.IsKeyJustPressed(commonToEbitenKey[k])
+	return inpututil.IsKeyJustPressed(toEbitenKey[k])
 }
 
 func (i *Input) IsKeyJustReleased(k int) bool {
-	return inpututil.IsKeyJustReleased(commonToEbitenKey[k])
+	return inpututil.IsKeyJustReleased(toEbitenKey[k])
 }
 
 func (i *Input) IsMouseButtonPressed(k int) bool {
-	return ebiten.IsMouseButtonPressed(commonToEbitenMouseButton[k])
+	return ebiten.IsMouseButtonPressed(toEbitenMouseButton[k])
 }
 
 func (i *Input) IsMouseButtonJustPressed(k int) bool {
-	return inpututil.IsMouseButtonJustPressed(commonToEbitenMouseButton[k])
+	return inpututil.IsMouseButtonJustPressed(toEbitenMouseButton[k])
 }
 
 func (i *Input) IsMouseButtonJustReleased(k int) bool {
-	return inpututil.IsMouseButtonJustReleased(commonToEbitenMouseButton[k])
+	return inpututil.IsMouseButtonJustReleased(toEbitenMouseButton[k])
 }
 
 func (i *Input) CursorPosition() (int, int) {

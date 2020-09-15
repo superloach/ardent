@@ -14,4 +14,7 @@ type Component interface {
 	NewAnimationFromAssetPath(string) (Animation, error)
 
 	NewRenderer() Renderer
+	NewIsoRenderer() IsoRenderer
+
+	NewTilemap(int, [2][][]int, map[int]Image) Tilemap
 }

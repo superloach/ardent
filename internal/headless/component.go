@@ -4,6 +4,7 @@ import (
 	"image"
 
 	"github.com/split-cube-studios/ardent/engine"
+	"github.com/split-cube-studios/ardent/internal/common"
 )
 
 type component struct{}
@@ -34,4 +35,12 @@ func (c component) NewAnimationFromAssetPath(path string) (engine.Animation, err
 
 func (c component) NewRenderer() engine.Renderer {
 	return new(Renderer)
+}
+
+func (c component) NewIsoRenderer() engine.IsoRenderer {
+	return new(IsoRenderer)
+}
+
+func (c component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.Image) engine.Tilemap {
+	return new(common.Tilemap)
 }

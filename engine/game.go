@@ -14,6 +14,8 @@ type Game interface {
 	// be applied in the order they are added.
 	AddRenderer(...Renderer)
 
+	AddIsoRenderer(...IsoRenderer)
+
 	// IsFullscreen returns the fullscreen state of the game.
 	IsFullscreen() bool
 	// SetFullscreen sets the fullscreen state of the game.

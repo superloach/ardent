@@ -1,112 +1,110 @@
 package engine
 
-import "github.com/split-cube-studios/ardent/internal/common"
-
 const (
-	Key0            = common.Key0
-	Key1            = common.Key1
-	Key2            = common.Key2
-	Key3            = common.Key3
-	Key4            = common.Key4
-	Key5            = common.Key5
-	Key6            = common.Key6
-	Key7            = common.Key7
-	Key8            = common.Key8
-	Key9            = common.Key9
-	KeyA            = common.KeyA
-	KeyB            = common.KeyB
-	KeyC            = common.KeyC
-	KeyD            = common.KeyD
-	KeyE            = common.KeyE
-	KeyF            = common.KeyF
-	KeyG            = common.KeyG
-	KeyH            = common.KeyH
-	KeyI            = common.KeyI
-	KeyJ            = common.KeyJ
-	KeyK            = common.KeyK
-	KeyL            = common.KeyL
-	KeyM            = common.KeyM
-	KeyN            = common.KeyN
-	KeyO            = common.KeyO
-	KeyP            = common.KeyP
-	KeyQ            = common.KeyQ
-	KeyR            = common.KeyR
-	KeyS            = common.KeyS
-	KeyT            = common.KeyT
-	KeyU            = common.KeyU
-	KeyV            = common.KeyV
-	KeyW            = common.KeyW
-	KeyX            = common.KeyX
-	KeyY            = common.KeyY
-	KeyZ            = common.KeyZ
-	KeyApostrophe   = common.KeyApostrophe
-	KeyBackslash    = common.KeyBackslash
-	KeyBackspace    = common.KeyBackspace
-	KeyCapsLock     = common.KeyCapsLock
-	KeyComma        = common.KeyComma
-	KeyDelete       = common.KeyDelete
-	KeyDown         = common.KeyDown
-	KeyEnd          = common.KeyEnd
-	KeyEnter        = common.KeyEnter
-	KeyEqual        = common.KeyEqual
-	KeyEscape       = common.KeyEscape
-	KeyF1           = common.KeyF1
-	KeyF2           = common.KeyF2
-	KeyF3           = common.KeyF3
-	KeyF4           = common.KeyF4
-	KeyF5           = common.KeyF5
-	KeyF6           = common.KeyF6
-	KeyF7           = common.KeyF7
-	KeyF8           = common.KeyF8
-	KeyF9           = common.KeyF9
-	KeyF10          = common.KeyF10
-	KeyF11          = common.KeyF11
-	KeyF12          = common.KeyF12
-	KeyGraveAccent  = common.KeyGraveAccent
-	KeyHome         = common.KeyHome
-	KeyInsert       = common.KeyInsert
-	KeyKP0          = common.KeyKP0
-	KeyKP1          = common.KeyKP1
-	KeyKP2          = common.KeyKP2
-	KeyKP3          = common.KeyKP3
-	KeyKP4          = common.KeyKP4
-	KeyKP5          = common.KeyKP5
-	KeyKP6          = common.KeyKP6
-	KeyKP7          = common.KeyKP7
-	KeyKP8          = common.KeyKP8
-	KeyKP9          = common.KeyKP9
-	KeyKPAdd        = common.KeyKPAdd
-	KeyKPDecimal    = common.KeyKPDecimal
-	KeyKPDivide     = common.KeyKPDivide
-	KeyKPEnter      = common.KeyKPEnter
-	KeyKPEqual      = common.KeyKPEqual
-	KeyKPMultiply   = common.KeyKPMultiply
-	KeyKPSubtract   = common.KeyKPSubtract
-	KeyLeft         = common.KeyLeft
-	KeyLeftBracket  = common.KeyLeftBracket
-	KeyMenu         = common.KeyMenu
-	KeyMinus        = common.KeyMinus
-	KeyNumLock      = common.KeyNumLock
-	KeyPageDown     = common.KeyPageDown
-	KeyPageUp       = common.KeyPageUp
-	KeyPause        = common.KeyPause
-	KeyPeriod       = common.KeyPeriod
-	KeyPrintScreen  = common.KeyPrintScreen
-	KeyRight        = common.KeyRight
-	KeyRightBracket = common.KeyRightBracket
-	KeyScrollLock   = common.KeyScrollLock
-	KeySemicolon    = common.KeySemicolon
-	KeySlash        = common.KeySlash
-	KeySpace        = common.KeySpace
-	KeyTab          = common.KeyTab
-	KeyUp           = common.KeyUp
-	KeyAlt          = common.KeyAlt
-	KeyControl      = common.KeyControl
-	KeyShift        = common.KeyShift
+	Key0 = iota
+	Key1
+	Key2
+	Key3
+	Key4
+	Key5
+	Key6
+	Key7
+	Key8
+	Key9
+	KeyA
+	KeyB
+	KeyC
+	KeyD
+	KeyE
+	KeyF
+	KeyG
+	KeyH
+	KeyI
+	KeyJ
+	KeyK
+	KeyL
+	KeyM
+	KeyN
+	KeyO
+	KeyP
+	KeyQ
+	KeyR
+	KeyS
+	KeyT
+	KeyU
+	KeyV
+	KeyW
+	KeyX
+	KeyY
+	KeyZ
+	KeyApostrophe
+	KeyBackslash
+	KeyBackspace
+	KeyCapsLock
+	KeyComma
+	KeyDelete
+	KeyDown
+	KeyEnd
+	KeyEnter
+	KeyEqual
+	KeyEscape
+	KeyF1
+	KeyF2
+	KeyF3
+	KeyF4
+	KeyF5
+	KeyF6
+	KeyF7
+	KeyF8
+	KeyF9
+	KeyF10
+	KeyF11
+	KeyF12
+	KeyGraveAccent
+	KeyHome
+	KeyInsert
+	KeyKP0
+	KeyKP1
+	KeyKP2
+	KeyKP3
+	KeyKP4
+	KeyKP5
+	KeyKP6
+	KeyKP7
+	KeyKP8
+	KeyKP9
+	KeyKPAdd
+	KeyKPDecimal
+	KeyKPDivide
+	KeyKPEnter
+	KeyKPEqual
+	KeyKPMultiply
+	KeyKPSubtract
+	KeyLeft
+	KeyLeftBracket
+	KeyMenu
+	KeyMinus
+	KeyNumLock
+	KeyPageDown
+	KeyPageUp
+	KeyPause
+	KeyPeriod
+	KeyPrintScreen
+	KeyRight
+	KeyRightBracket
+	KeyScrollLock
+	KeySemicolon
+	KeySlash
+	KeySpace
+	KeyTab
+	KeyUp
+	KeyAlt
+	KeyControl
+	KeyShift
 )
 
 const (
-	MouseButtonLeft   = common.MouseButtonLeft
-	MouseButtonRight  = common.MouseButtonRight
-	MouseButtonMiddle = common.MouseButtonMiddle
+	MouseButtonLeft = iota
+	MouseButtonRight
+	MouseButtonMiddle
 )

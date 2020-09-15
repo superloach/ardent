@@ -43,6 +43,10 @@ func (g *Game) AddRenderer(renderer ...engine.Renderer) {
 	// NOOP
 }
 
+func (g *Game) AddIsoRenderer(isoRenderer ...engine.IsoRenderer) {
+
+}
+
 // IsFullscreen returns the fullscreen state of the game.
 func (g Game) IsFullscreen() bool {
 	return false
