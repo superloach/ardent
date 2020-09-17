@@ -56,7 +56,7 @@ func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
 }
 
 func (c component) NewImageFromImage(img image.Image) engine.Image {
-	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterDefault)
+	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterNearest)
 	return &Image{
 		img: eimg,
 		sx:  1,
