@@ -2,9 +2,11 @@ package headless
 
 import (
 	"image"
+	"image/color"
 
 	"github.com/split-cube-studios/ardent/engine"
 	"github.com/split-cube-studios/ardent/internal/common"
+	"golang.org/x/image/font"
 )
 
 type component struct{}
@@ -22,6 +24,10 @@ func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
 }
 
 func (c component) NewImageFromImage(img image.Image) engine.Image {
+	return new(Image)
+}
+
+func (c component) NewTextImage(text string, w, h int, face font.Face, clr color.Color) engine.Image {
 	return new(Image)
 }
 

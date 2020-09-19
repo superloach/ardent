@@ -3,14 +3,17 @@ package ebiten
 import (
 	"fmt"
 	"image"
+	"image/color"
 	_ "image/jpeg"
 	_ "image/png"
 	"io/ioutil"
 	"os"
 
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/text"
 	"github.com/split-cube-studios/ardent/engine"
 	"github.com/split-cube-studios/ardent/internal/common"
+	"golang.org/x/image/font"
 )
 
 type component struct{}
@@ -59,6 +62,16 @@ func (c component) NewImageFromImage(img image.Image) engine.Image {
 	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterNearest)
 	return &Image{
 		img: eimg,
+		sx:  1,
+		sy:  1,
+	}
+}
+
+func (c component) NewTextImage(txt string, w, h int, face font.Face, clr color.Color) engine.Image {
+	img, _ := ebiten.NewImage(w, h, ebiten.FilterNearest)
+	text.Draw(img, txt, face, 0, face.Metrics().Height.Round(), clr)
+	return &Image{
+		img: img,
 		sx:  1,
 		sy:  1,
 	}
