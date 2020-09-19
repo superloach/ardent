@@ -14,6 +14,10 @@ var (
 func main() {
 	// create new game instance
 	game := ardent.NewGame(
+		"Animation",
+		854,
+		480,
+		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
 		// tick function

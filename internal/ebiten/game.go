@@ -8,6 +8,10 @@ import (
 // Game is an ebiten implementation
 // of engine.Game.
 type Game struct {
+	title string
+	w, h  int
+	flags byte
+
 	tickFunc   func()
 	layoutFunc func(int, int) (int, int)
 
@@ -20,10 +24,17 @@ type Game struct {
 
 // NewGame returns an instantiated game.
 func NewGame(
+	title string,
+	w, h int,
+	flags byte,
 	tickFunc func(),
 	layoutFunc func(int, int) (int, int),
 ) *Game {
 	return &Game{
+		title:      title,
+		w:          w,
+		h:          h,
+		flags:      flags,
 		tickFunc:   tickFunc,
 		layoutFunc: layoutFunc,
 		c:          new(component),
@@ -33,10 +44,10 @@ func NewGame(
 // Run starts up the engine and begins
 // running the game.
 func (g *Game) Run() error {
-	ebiten.SetWindowSize(100, 100)
-	ebiten.SetWindowTitle("Ebiten")
-	ebiten.SetWindowResizable(true)
-	ebiten.SetRunnableInBackground(true)
+	ebiten.SetWindowSize(g.w, g.h)
+	ebiten.SetWindowTitle(g.title)
+	ebiten.SetWindowResizable(g.flags&engine.FlagResizable > 0)
+	ebiten.SetRunnableInBackground(g.flags&engine.FlagRunsInBackground > 0)
 
 	return ebiten.RunGame(g)
 }

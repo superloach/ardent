@@ -17,6 +17,9 @@ const (
 
 // NewGame creates a new game instance for a given backend.
 func NewGame(
+	title string,
+	w, h int,
+	flags byte,
 	backend Backend,
 	tickFunc func(),
 	layoutFunc func(int, int) (int, int),
@@ -29,6 +32,10 @@ func NewGame(
 		)
 	case EBITEN:
 		return ebiten.NewGame(
+			title,
+			w,
+			h,
+			flags,
 			tickFunc,
 			layoutFunc,
 		)

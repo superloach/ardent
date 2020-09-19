@@ -8,6 +8,10 @@ import (
 func main() {
 	// create new game instance
 	game := ardent.NewGame(
+		"Isometric",
+		854,
+		480,
+		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
 		// tick function

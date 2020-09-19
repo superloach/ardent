@@ -1,5 +1,10 @@
 package engine
 
+const (
+	FlagResizable = 1 << iota
+	FlagRunsInBackground
+)
+
 // Game is an engine instance.
 type Game interface {
 	// Run starts running the game.

@@ -4,11 +4,16 @@ import (
 	"math"
 
 	"github.com/split-cube-studios/ardent"
+	"github.com/split-cube-studios/ardent/engine"
 )
 
 func main() {
 	// create new game instance
 	game := ardent.NewGame(
+		"Atlas",
+		854,
+		480,
+		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
 		// tick function

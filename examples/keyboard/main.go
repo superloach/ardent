@@ -29,6 +29,10 @@ func tick() {
 func main() {
 	// create new game instance
 	game = ardent.NewGame(
+		"Keyboard",
+		854,
+		480,
+		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
 		// tick function
