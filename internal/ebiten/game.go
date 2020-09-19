@@ -78,7 +78,6 @@ func (g *Game) Update(screen *ebiten.Image) error {
 
 	for _, renderer := range g.renderers {
 		renderer.(*Renderer).tick()
-		renderer.(*Renderer).setViewport(g.w, g.h)
 	}
 
 	if ebiten.IsDrawingSkipped() {
@@ -86,10 +85,12 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	}
 
 	for _, isoRenderer := range g.isoRenderers {
+		isoRenderer.(*IsoRenderer).setViewport(g.w, g.h)
 		isoRenderer.(*IsoRenderer).draw(screen)
 	}
 
 	for _, renderer := range g.renderers {
+		renderer.(*Renderer).setViewport(g.w, g.h)
 		renderer.(*Renderer).draw(screen)
 	}
 

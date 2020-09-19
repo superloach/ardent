@@ -5,12 +5,16 @@ import (
 	"github.com/split-cube-studios/ardent/engine"
 )
 
+const (
+	w, h = 854, 480
+)
+
 func main() {
 	// create new game instance
 	game := ardent.NewGame(
 		"Isometric",
-		854,
-		480,
+		w,
+		h,
 		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
@@ -18,7 +22,7 @@ func main() {
 		func() {},
 		// layout function
 		func(ow, oh int) (int, int) {
-			return ow, oh
+			return w, h
 		},
 	)
 
@@ -51,9 +55,13 @@ func main() {
 	}
 
 	tilemap := component.NewTilemap(128, data, mapper)
+	camera := component.NewCamera()
+
+	camera.LookAt(64, 128)
 
 	renderer := component.NewIsoRenderer()
 	renderer.SetTilemap(tilemap)
+	renderer.SetCamera(camera)
 
 	game.AddIsoRenderer(renderer)
 	game.Run()
