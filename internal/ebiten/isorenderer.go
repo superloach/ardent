@@ -22,20 +22,20 @@ type isoRendererImage struct {
 	tileHeight int
 }
 
-func (i *IsoRenderer) SetTilemap(tilemap engine.Tilemap) {
-	i.tilemap = tilemap.(*common.Tilemap)
+func (r *IsoRenderer) SetTilemap(tilemap engine.Tilemap) {
+	r.tilemap = tilemap.(*common.Tilemap)
 }
 
-func (i *IsoRenderer) SetCamera(camera engine.Camera) {
-	i.camera = camera
+func (r *IsoRenderer) SetCamera(camera engine.Camera) {
+	r.camera = camera
 }
 
-func (i *IsoRenderer) AddImage(images ...engine.Image) {
-	i.images = append(i.images, images...)
+func (r *IsoRenderer) AddImage(images ...engine.Image) {
+	r.images = append(r.images, images...)
 }
 
-func (i *IsoRenderer) tick() {
-	for _, img := range i.images {
+func (r *IsoRenderer) tick() {
+	for _, img := range r.images {
 		anim, ok := img.(*Animation)
 		if ok {
 			anim.tick()
@@ -43,14 +43,14 @@ func (i *IsoRenderer) tick() {
 	}
 }
 
-func (i *IsoRenderer) tilemapToIsoLayers() [][]*isoRendererImage {
-	if i.tilemap == nil {
+func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
+	if r.tilemap == nil {
 		return make([][]*isoRendererImage, 1)
 	}
 
-	tw := i.tilemap.Width
-	data := i.tilemap.Data
-	mapper := i.tilemap.Mapper
+	tw := r.tilemap.Width
+	data := r.tilemap.Data
+	mapper := r.tilemap.Mapper
 
 	w, h := len(data[0][0]), len(data[0])
 
@@ -60,12 +60,22 @@ func (i *IsoRenderer) tilemapToIsoLayers() [][]*isoRendererImage {
 		for j := 0; j < w*h; j++ {
 			y := j * tw / 4
 
+			// cull y
+			if y-cy < 0 || y-cy > r.h {
+				continue
+			}
+
 			for k := 0; k <= j; k++ {
 				if !(j-k < w && k < h) {
 					continue
 				}
 
 				x := ((k - j/2) * tw) - (tw * (j % 2) / 2)
+
+				// cull x
+				if x-cx < 0 || x-cx > r.w {
+					continue
+				}
 
 				img := mapper[data[i][j-k][k]]
 				if img == nil {
@@ -96,16 +106,16 @@ func (i *IsoRenderer) tilemapToIsoLayers() [][]*isoRendererImage {
 	return layers
 }
 
-func (i *IsoRenderer) draw(screen *ebiten.Image) {
+func (r *IsoRenderer) draw(screen *ebiten.Image) {
 	var cx, cy float64
-	if i.camera != nil {
-		cx, cy = i.camera.Position()
-		cx, cy = cx-float64(i.w/2), cy-float64(i.h/2)
+	if r.camera != nil {
+		cx, cy = r.camera.Position()
+		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
 
-	layers := i.tilemapToIsoLayers()
+	layers := r.tilemapToIsoLayers(int(cx), int(cy))
 
-	for _, img := range i.images {
+	for _, img := range r.images {
 		var tmpImage *isoRendererImage
 
 		switch img.(type) {
@@ -172,6 +182,6 @@ func (i *IsoRenderer) draw(screen *ebiten.Image) {
 	}
 }
 
-func (i *IsoRenderer) setViewport(w, h int) {
-	i.w, i.h = w, h
+func (r *IsoRenderer) setViewport(w, h int) {
+	r.w, r.h = w, h
 }
