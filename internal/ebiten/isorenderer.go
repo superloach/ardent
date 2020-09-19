@@ -61,7 +61,7 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 			y := j * tw / 4
 
 			// cull y
-			if y-cy < 0 || y-cy > r.h {
+			if y-cy < -800 || y-cy > r.h+800 {
 				continue
 			}
 
@@ -73,7 +73,7 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 				x := ((k - j/2) * tw) - (tw * (j % 2) / 2)
 
 				// cull x
-				if x-cx < 0 || x-cx > r.w {
+				if x-cx < -800 || x-cx > r.w+800 {
 					continue
 				}
 
