@@ -68,6 +68,7 @@ func (g *Game) AddIsoRenderer(isoRenderer ...engine.IsoRenderer) {
 
 // Layout is called when the window resizes.
 func (g Game) Layout(ow, oh int) (int, int) {
+	g.w, g.h = ow, oh
 	return g.layoutFunc(ow, oh)
 }
 
@@ -77,6 +78,7 @@ func (g *Game) Update(screen *ebiten.Image) error {
 
 	for _, renderer := range g.renderers {
 		renderer.(*Renderer).tick()
+		renderer.(*Renderer).setViewport(g.w, g.h)
 	}
 
 	if ebiten.IsDrawingSkipped() {

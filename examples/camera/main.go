@@ -6,10 +6,15 @@ import (
 )
 
 var (
-	game    engine.Game
-	camera  engine.Camera
-	stripes engine.Image
-	x, y    float64
+	game                      engine.Game
+	camera                    engine.Camera
+	stripes                   engine.Image
+	x, y                      float64
+	stripeWidth, stripeHeight int
+)
+
+const (
+	w, h = 854, 480
 )
 
 // tick function
@@ -27,15 +32,15 @@ func tick() {
 	}
 
 	stripes.Translate(x, y)
-	camera.LookAt(x, y)
+	camera.LookAt(x+float64(stripeWidth/2), y+float64(stripeHeight/2))
 }
 
 func main() {
 	// create new game instance
 	game = ardent.NewGame(
 		"Camera",
-		854,
-		480,
+		w,
+		h,
 		engine.FlagResizable,
 		// use Ebiten backend
 		ardent.EBITEN,
@@ -43,7 +48,8 @@ func main() {
 		tick,
 		// layout function
 		func(ow, oh int) (int, int) {
-			return ow, oh
+			// preserve virtual res
+			return w, h
 		},
 	)
 
@@ -63,6 +69,8 @@ func main() {
 	stripes = atlas.GetImage("stripes")
 	swirls := atlas.GetImage("swirls")
 	blocks := atlas.GetImage("blocks")
+
+	stripeWidth, stripeHeight = stripes.Size()
 
 	// set image positions
 	swirls.Translate(128, 0)

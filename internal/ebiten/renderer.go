@@ -9,6 +9,8 @@ import (
 type Renderer struct {
 	imgs   []engine.Image
 	camera engine.Camera
+
+	w, h int
 }
 
 // AddImage adds images to the draw stack.
@@ -41,6 +43,7 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 	if r.camera != nil {
 		cx, cy = r.camera.Position()
+		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
 
 	for _, img := range r.imgs {
@@ -71,4 +74,8 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 		screen.DrawImage(eimg, op)
 	}
+}
+
+func (r *Renderer) setViewport(w, h int) {
+	r.w, r.h = w, h
 }
