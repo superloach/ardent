@@ -54,3 +54,7 @@ func (c component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.
 func (c component) NewCamera() engine.Camera {
 	return new(common.Camera)
 }
+
+func (c component) NewCollider() engine.Collider {
+	return new(common.Collider)
+}

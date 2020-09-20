@@ -26,4 +26,6 @@ type Component interface {
 	NewTilemap(int, [2][][]int, map[int]Image) Tilemap
 
 	NewCamera() Camera
+
+	NewCollider() Collider
 }
