@@ -1,8 +1,6 @@
 package common
 
 import (
-	"fmt"
-
 	"github.com/split-cube-studios/ardent/engine"
 )
 
@@ -26,8 +24,6 @@ func (c *Collider) Resolve(x, y float64) (float64, float64) {
 
 	tileX, tileY := c.m.indexToIso(ix, iy)
 	centerX, centerY := tileX+float64(c.m.Width/2), tileY+float64(c.m.Width/4)
-
-	fmt.Println(tileX, tileY)
 
 	a1 := centerY - y
 	b1 := x - centerX
