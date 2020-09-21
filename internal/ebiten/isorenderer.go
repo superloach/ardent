@@ -52,37 +52,27 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 	data := r.tilemap.Data
 	mapper := r.tilemap.Mapper
 
-	w, h := len(data[0][0]), len(data[0])
-
 	layers := make([][]*isoRendererImage, len(data))
 
 	for i := 0; i < len(data); i++ {
-		for j := 0; j < w*h; j++ {
-			y := j * tw / 4
+		for j := 0; j < len(data[i]); j++ {
+			for k := 0; k < len(data[i][j]); k++ {
+				x := (j - k) * (tw / 2)
+				y := (j + k) * (tw / 4)
 
-			// cull y
-			if y-cy < -800 || y-cy > r.h+800 {
-				continue
-			}
-
-			for k := 0; k <= j; k++ {
-				if !(j-k < w && k < h) {
-					continue
-				}
-
-				x := ((k - j/2) * tw) - (tw * (j % 2) / 2)
-
-				// cull x
 				if x-cx < -800 || x-cx > r.w+800 {
 					continue
 				}
 
-				img := mapper[data[i][j-k][k]]
+				if y-cy < -800 || y-cy > r.h+800 {
+					continue
+				}
+
+				img := mapper[data[i][j][k]]
 				if img == nil {
 					continue
 				}
 
-				y := y // shadow var for modification
 				if i != 0 {
 					_, ih := img.Size()
 					y -= ih - tw/4
