@@ -1,6 +1,8 @@
 package common
 
 import (
+	"math"
+
 	"github.com/split-cube-studios/ardent/engine"
 )
 
@@ -12,15 +14,17 @@ type Tilemap struct {
 
 func (t *Tilemap) isoToIndex(x, y float64) (int, int) {
 	/*
-		i := y * 4 / float64(t.Width)
+		i := y*4/float64(t.Width) + 1
 		j := (i*float64(t.Width) + 2*x) / float64(2*t.Width)
 
-		return int(math.Round(i - j)), int(math.Round(j)) - 1
+		//	return int(math.Round(i-j)) + 1, int(math.Round(j))
+		return int(math.Round(j)), int(math.Round(i-j)) + 1
 	*/
-	ix := int((x/float64(t.Width/2) + y/float64(t.Width/4)) / 2)
-	iy := int((y/float64(t.Width/4) - x/float64(t.Width/2)) / 2)
 
-	return ix, iy
+	ix := int(math.Ceil((x/float64(t.Width/2) + y/float64(t.Width/4)) / 2))
+	iy := int(math.Ceil((y/float64(t.Width/4) - x/float64(t.Width/2)) / 2))
+
+	return ix + 1, iy + 1
 }
 
 func (t *Tilemap) indexToIso(i, j int) (float64, float64) {
@@ -44,5 +48,5 @@ func (t *Tilemap) getTileValue(x, y, z int) int {
 		z < 0 || x < 0 || y < 0 {
 		return 0
 	}
-	return t.Data[z][x][y]
+	return t.Data[z][y][x]
 }

@@ -68,7 +68,7 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 					continue
 				}
 
-				img := mapper[data[i][j][k]]
+				img := mapper[data[i][k][j]]
 				if img == nil {
 					continue
 				}
