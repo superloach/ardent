@@ -1,13 +1,15 @@
 package common
 
+import "github.com/split-cube-studios/ardent/engine"
+
 type Camera struct {
-	x, y float64
+	engine.Vec2
 }
 
-func (c *Camera) LookAt(x, y float64) {
-	c.x, c.y = x, y
+func (c *Camera) LookAt(x, y, t float64) {
+	c.Vec2 = c.Vec2.Lerp(engine.Vec2{x, y}, t)
 }
 
 func (c *Camera) Position() (float64, float64) {
-	return c.x, c.y
+	return c.X, c.Y
 }
