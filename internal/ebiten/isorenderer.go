@@ -58,6 +58,8 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
 		for j := 0; j < len(data[i]); j++ {
 			for k := 0; k < len(data[i][j]); k++ {
 				x, y := r.tilemap.IndexToIso(j, k)
+				x -= float64(tw / 2)
+				y -= float64(tw)
 
 				if x-cx < -800 || x-cx > float64(r.w+800) {
 					continue
