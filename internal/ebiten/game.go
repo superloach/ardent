@@ -15,9 +15,8 @@ type Game struct {
 	tickFunc   func()
 	layoutFunc func(int, int) (int, int)
 
-	c            *component
-	isoRenderers []engine.IsoRenderer
-	renderers    []engine.Renderer
+	c         *component
+	renderers []engine.Renderer
 
 	Input
 }
@@ -62,10 +61,6 @@ func (g *Game) AddRenderer(renderer ...engine.Renderer) {
 	g.renderers = append(g.renderers, renderer...)
 }
 
-func (g *Game) AddIsoRenderer(isoRenderer ...engine.IsoRenderer) {
-	g.isoRenderers = append(g.isoRenderers, isoRenderer...)
-}
-
 // Layout is called when the window resizes.
 func (g *Game) Layout(ow, oh int) (int, int) {
 	g.w, g.h = g.layoutFunc(ow, oh)
@@ -76,26 +71,23 @@ func (g *Game) Layout(ow, oh int) (int, int) {
 func (g *Game) Update(screen *ebiten.Image) error {
 	g.tickFunc()
 
-	for _, isoRenderer := range g.isoRenderers {
-		isoRenderer.(*IsoRenderer).tick()
-	}
-
 	for _, renderer := range g.renderers {
-		renderer.(*Renderer).tick()
+		renderer.Tick()
 	}
 
 	if ebiten.IsDrawingSkipped() {
 		return nil
 	}
 
-	for _, isoRenderer := range g.isoRenderers {
-		isoRenderer.(*IsoRenderer).setViewport(g.w, g.h)
-		isoRenderer.(*IsoRenderer).draw(screen)
-	}
-
 	for _, renderer := range g.renderers {
-		renderer.(*Renderer).setViewport(g.w, g.h)
-		renderer.(*Renderer).draw(screen)
+		switch renderer.(type) {
+		case *Renderer:
+			renderer.(*Renderer).setViewport(g.w, g.h)
+			renderer.(*Renderer).draw(screen)
+		case *IsoRenderer:
+			renderer.(*IsoRenderer).setViewport(g.w, g.h)
+			renderer.(*IsoRenderer).draw(screen)
+		}
 	}
 
 	return nil

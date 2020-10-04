@@ -34,7 +34,7 @@ func (r *IsoRenderer) AddImage(images ...engine.Image) {
 	r.images = append(r.images, images...)
 }
 
-func (r *IsoRenderer) tick() {
+func (r *IsoRenderer) Tick() {
 	for _, img := range r.images {
 		anim, ok := img.(*Animation)
 		if ok {
@@ -43,7 +43,7 @@ func (r *IsoRenderer) tick() {
 	}
 }
 
-func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
+func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
 	if r.tilemap == nil {
 		return make([][]*isoRendererImage, 1)
 	}
@@ -57,14 +57,13 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 	for i := 0; i < len(data); i++ {
 		for j := 0; j < len(data[i]); j++ {
 			for k := 0; k < len(data[i][j]); k++ {
-				x := (j - k) * (tw / 2)
-				y := (j + k) * (tw / 4)
+				x, y := r.tilemap.IndexToIso(j, k)
 
-				if x-cx < -800 || x-cx > r.w+800 {
+				if x-cx < -800 || x-cx > float64(r.w+800) {
 					continue
 				}
 
-				if y-cy < -800 || y-cy > r.h+800 {
+				if y-cy < -800 || y-cy > float64(r.h+800) {
 					continue
 				}
 
@@ -75,14 +74,14 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy int) [][]*isoRendererImage {
 
 				if i != 0 {
 					_, ih := img.Size()
-					y -= ih - tw/4
+					y -= float64(ih - tw/4)
 				}
 
 				layers[i] = append(layers[i], &isoRendererImage{
 					img: &Image{
 						img: img.(*Image).img,
-						tx:  float64(x),
-						ty:  float64(y),
+						tx:  x,
+						ty:  y,
 						sx:  1,
 						sy:  1,
 					},
@@ -103,7 +102,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
 
-	layers := r.tilemapToIsoLayers(int(cx), int(cy))
+	layers := r.tilemapToIsoLayers(cx, cy)
 
 	for _, img := range r.images {
 		var tmpImage *isoRendererImage

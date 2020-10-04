@@ -19,13 +19,13 @@ func (c *Collider) Resolve(src, dst engine.Vec2) engine.Vec2 {
 		return dst
 	}
 
-	ix, iy := c.m.isoToIndex(dst.X, dst.Y)
+	ix, iy := c.m.IsoToIndex(dst.X, dst.Y)
 
-	if c.m.getTileValue(ix, iy, 1) == 0 {
+	if c.m.GetTileValue(ix, iy, 1) == 0 {
 		return dst
 	}
 
-	tileX, tileY := c.m.indexToIso(ix, iy)
+	tileX, tileY := c.m.IndexToIso(ix, iy)
 	centerX, centerY := tileX, tileY-float64(c.m.Width-c.m.Width/4)
 
 	// tile edge
@@ -59,8 +59,8 @@ func (c *Collider) Resolve(src, dst engine.Vec2) engine.Vec2 {
 	}
 
 	// check secondary collision
-	if c.m.getTileValue(nix, niy, 1) != 0 {
-		tileX, tileY = c.m.indexToIso(nix, niy)
+	if c.m.GetTileValue(nix, niy, 1) != 0 {
+		tileX, tileY = c.m.IndexToIso(nix, niy)
 		centerX, centerY = tileX, tileY-float64(c.m.Width-c.m.Width/4)
 
 		// tile edge
@@ -111,8 +111,8 @@ func (c *Collider) Resolve(src, dst engine.Vec2) engine.Vec2 {
 
 	// FIXME
 	// check tertiary collison
-	if c.m.getTileValue(nix, niy, 1) != 0 {
-		tileX, tileY = c.m.indexToIso(nix, niy)
+	if c.m.GetTileValue(nix, niy, 1) != 0 {
+		tileX, tileY = c.m.IndexToIso(nix, niy)
 		centerX, centerY = tileX, tileY-float64(c.m.Width-c.m.Width/4)
 
 		var xMod, yMod float64

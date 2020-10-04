@@ -22,7 +22,7 @@ func (r *Renderer) SetCamera(camera engine.Camera) {
 	r.camera = camera
 }
 
-func (r *Renderer) tick() {
+func (r *Renderer) Tick() {
 	for _, img := range r.imgs {
 		anim, ok := img.(*Animation)
 		if ok {

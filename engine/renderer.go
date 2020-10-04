@@ -8,4 +8,6 @@ type Renderer interface {
 	AddImage(...Image)
 
 	SetCamera(Camera)
+
+	Tick()
 }

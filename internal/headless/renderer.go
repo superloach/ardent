@@ -15,3 +15,5 @@ func (r Renderer) AddImage(images ...engine.Image) {
 func (r Renderer) SetCamera(camera engine.Camera) {
 
 }
+
+func (r Renderer) Tick() {}

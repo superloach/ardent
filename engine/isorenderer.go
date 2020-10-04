@@ -1,7 +1,6 @@
 package engine
 
 type IsoRenderer interface {
+	Renderer
 	SetTilemap(Tilemap)
-	SetCamera(Camera)
-	AddImage(...Image)
 }
