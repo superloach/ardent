@@ -9,6 +9,8 @@ type Image struct {
 	tx, ty float64
 	sx, sy float64
 	d      float64
+
+	disposed bool
 }
 
 // Translate sets the image translation.
@@ -27,6 +29,16 @@ func (i *Image) Rotate(d float64) {
 }
 
 // Size returns the image size.
-func (i Image) Size() (int, int) {
+func (i *Image) Size() (int, int) {
 	return i.img.Size()
+}
+
+// Dispose marks the image to be disposed.
+func (i *Image) Dispose() {
+	i.disposed = true
+}
+
+// IsDisposed indicates if the image has been dispoed.
+func (i *Image) IsDisposed() bool {
+	return i.disposed
 }

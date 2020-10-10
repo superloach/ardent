@@ -18,4 +18,11 @@ type Image interface {
 
 	// Size returns the size of the image.
 	Size() (int, int)
+
+	// Dispose marks the image to be disposed.
+	Dispose()
+
+	// IsDisposed indicates if the image
+	// has been disposed.
+	IsDisposed() bool
 }

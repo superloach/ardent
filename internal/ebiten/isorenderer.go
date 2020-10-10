@@ -35,12 +35,25 @@ func (r *IsoRenderer) AddImage(images ...engine.Image) {
 }
 
 func (r *IsoRenderer) Tick() {
+	var i int
 	for _, img := range r.images {
+		if img.IsDisposed() {
+			continue
+		}
+
 		anim, ok := img.(*Animation)
 		if ok {
 			anim.tick()
 		}
+
+		r.images[i] = img
+		i++
 	}
+
+	for j := i; j < len(r.images); j++ {
+		r.images[j] = nil
+	}
+	r.images = r.images[:i]
 }
 
 func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {

@@ -20,6 +20,8 @@ type Animation struct {
 	tx, ty float64
 	sx, sy float64
 	d      float64
+
+	disposed bool
 }
 
 func (a *Animation) SetState(state string) {
@@ -56,6 +58,14 @@ func (a *Animation) Rotate(d float64) {
 
 func (a *Animation) Size() (int, int) {
 	return int(a.w), int(a.h)
+}
+
+func (a *Animation) Dispose() {
+	a.disposed = true
+}
+
+func (a *Animation) IsDisposed() bool {
+	return a.disposed
 }
 
 func (a *Animation) getFrame() *ebiten.Image {

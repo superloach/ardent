@@ -57,6 +57,9 @@ func (e *CoreEntity) Images() []Image {
 
 func (e *CoreEntity) Dispose() {
 	e.disposed = true
+	for _, img := range e.images {
+		img.Dispose()
+	}
 }
 
 func (e *CoreEntity) IsDisposed() bool {

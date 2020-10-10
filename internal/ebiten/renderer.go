@@ -23,12 +23,25 @@ func (r *Renderer) SetCamera(camera engine.Camera) {
 }
 
 func (r *Renderer) Tick() {
+	var i int
 	for _, img := range r.imgs {
+		if img.IsDisposed() {
+			continue
+		}
+
 		anim, ok := img.(*Animation)
 		if ok {
 			anim.tick()
 		}
+
+		r.imgs[i] = img
+		i++
 	}
+
+	for j := i; j < len(r.imgs); j++ {
+		r.imgs[j] = nil
+	}
+	r.imgs = r.imgs[:i]
 }
 
 // draw renders all images in the draw stack.

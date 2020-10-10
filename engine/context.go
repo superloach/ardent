@@ -19,8 +19,19 @@ func (c *Context) AddEntity(entities ...Entity) {
 }
 
 func (c *Context) Tick() {
+	var i int
 	for _, e := range c.entities {
-		// TODO check if disposed
+		if e.IsDisposed() {
+			continue
+		}
+
 		e.Tick()
+		c.entities[i] = e
+		i++
 	}
+
+	for j := i; j < len(c.entities); j++ {
+		c.entities[j] = nil
+	}
+	c.entities = c.entities[:i]
 }
