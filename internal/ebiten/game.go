@@ -15,9 +15,9 @@ type Game struct {
 	tickFunc   func()
 	layoutFunc func(int, int) (int, int)
 
-	c         *component
 	renderers []engine.Renderer
 
+	component
 	Input
 }
 
@@ -36,7 +36,6 @@ func NewGame(
 		flags:      flags,
 		tickFunc:   tickFunc,
 		layoutFunc: layoutFunc,
-		c:          new(component),
 	}
 }
 
@@ -49,11 +48,6 @@ func (g *Game) Run() error {
 	ebiten.SetRunnableInBackground(g.flags&engine.FlagRunsInBackground > 0)
 
 	return ebiten.RunGame(g)
-}
-
-// Component returns an ebiten component factory.
-func (g Game) Component() engine.Component {
-	return g.c
 }
 
 // AddRenderer adds a renderer to the draw stack.

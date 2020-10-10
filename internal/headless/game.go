@@ -8,8 +8,8 @@ import (
 // of engine.Game.
 type Game struct {
 	tickFunc func()
-	c        *component
 
+	component
 	Input
 }
 
@@ -20,7 +20,6 @@ func NewGame(
 ) *Game {
 	return &Game{
 		tickFunc: tickFunc,
-		c:        new(component),
 	}
 }
 
@@ -31,11 +30,6 @@ func (g *Game) Run() error {
 		g.tickFunc()
 	}
 	return nil
-}
-
-// Component returns an ebiten component factory.
-func (g Game) Component() engine.Component {
-	return g.c
 }
 
 // AddRenderer adds a renderer to the draw stack.

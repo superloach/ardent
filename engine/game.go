@@ -10,10 +10,6 @@ type Game interface {
 	// Run starts running the game.
 	Run() error
 
-	// Component returns the component
-	// factory for implementation components.
-	Component() Component
-
 	// AddRenderer adds a renderer
 	// to the game's draw stack. Renderers will
 	// be applied in the order they are added.
@@ -30,5 +26,6 @@ type Game interface {
 	// IsFocused returns the focused state of the game.
 	IsFocused() bool
 
+	Component
 	Input
 }
