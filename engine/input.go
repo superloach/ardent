@@ -14,5 +14,15 @@ type Input interface {
 	IsMouseButtonJustReleased(int) bool
 	CursorPosition() (int, int)
 	SetCursorBounds(int, int, int, int)
-	SetCursorCapture(bool)
+	SetCursorMode(CursorMode)
 }
+
+// CursorMode indication
+type CursorMode byte
+
+// Cursor modes
+const (
+	CURSOR_VISIBLE CursorMode = 1 << iota
+	CURSOR_HIDDEN
+	CURSOR_CAPTURED
+)

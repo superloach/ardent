@@ -1,5 +1,7 @@
 package headless
 
+import "github.com/split-cube-studios/ardent/engine"
+
 type Input struct{}
 
 func (i Input) IsAnyKeyPressed() bool {
@@ -40,4 +42,4 @@ func (i Input) CursorPosition() (int, int) {
 
 func (i Input) SetCursorBounds(minX, minY, maxX, maxY int) {}
 
-func (i Input) SetCursorCapture(capture bool) {}
+func (i Input) SetCursorMode(mode engine.CursorMode) {}

@@ -3,13 +3,13 @@ package ebiten
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
+	"github.com/split-cube-studios/ardent/engine"
 )
 
 type Input struct {
 	minX, minY, maxX, maxY int
 	lcx, lcy               int
 	vcx, vcy               int
-	capture                bool
 }
 
 func (i *Input) IsAnyKeyPressed() bool {
@@ -91,6 +91,12 @@ func (i *Input) SetCursorBounds(minX, minY, maxX, maxY int) {
 	i.minX, i.minY, i.maxX, i.maxY = minX, minY, maxX, maxY
 }
 
-func (i *Input) SetCursorCapture(capture bool) {
-	i.capture = capture
+var cursorModes = map[engine.CursorMode]ebiten.CursorModeType{
+	engine.CURSOR_VISIBLE:  ebiten.CursorModeVisible,
+	engine.CURSOR_HIDDEN:   ebiten.CursorModeHidden,
+	engine.CURSOR_CAPTURED: ebiten.CursorModeCaptured,
+}
+
+func (i *Input) SetCursorMode(mode engine.CursorMode) {
+	ebiten.SetCursorMode(cursorModes[mode])
 }
