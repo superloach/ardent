@@ -8,6 +8,8 @@ func (i Image) Translate(x float64, y float64) {
 	// NOOP
 }
 
+func (i Image) Offset(x, y float64) {}
+
 // Scale sets the image scale.
 func (i Image) Scale(x float64, y float64) {
 	// NOOP

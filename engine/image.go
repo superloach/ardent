@@ -8,6 +8,12 @@ type Image interface {
 	// relative to the origin.
 	Translate(float64, float64)
 
+	// Offset applies an offset to
+	// the image translation. This can be
+	// useful for relative positioning to
+	// a parent translation.
+	Offset(float64, float64)
+
 	// Scale sets the x y scale
 	// of the image relative to the origin.
 	Scale(float64, float64)

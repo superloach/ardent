@@ -7,6 +7,7 @@ type Image struct {
 	img *ebiten.Image
 
 	tx, ty float64
+	ox, oy float64
 	sx, sy float64
 	d      float64
 
@@ -18,6 +19,11 @@ type Image struct {
 // Translate sets the image translation.
 func (i *Image) Translate(x, y float64) {
 	i.tx, i.ty = x, y
+}
+
+// Offset applies the translation offset
+func (i *Image) Offset(x, y float64) {
+	i.ox, i.oy = x, y
 }
 
 // Scale sets the image scale.

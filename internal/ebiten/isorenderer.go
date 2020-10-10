@@ -135,6 +135,8 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 					img: a.getFrame(),
 					tx:  a.tx,
 					ty:  a.ty,
+					ox:  a.ox,
+					oy:  a.oy,
 					sx:  a.sx,
 					sy:  a.sy,
 					d:   a.d,
@@ -182,7 +184,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			img := isoImage.img
 
 			op := new(ebiten.DrawImageOptions)
-			op.GeoM.Translate(img.tx-cx, img.ty-cy)
+			op.GeoM.Translate(img.tx+img.ox-cx, img.ty+img.oy-cy)
 			op.GeoM.Scale(img.sx, img.sy)
 			op.GeoM.Rotate(img.d)
 
