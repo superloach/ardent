@@ -22,11 +22,19 @@ func (v Vec2) Lerp(v2 Vec2, t float64) Vec2 {
 	}
 }
 
+// Distance returns the distance between two vectors.
+func (v Vec2) Distance(v2 Vec2) float64 {
+	return math.Sqrt(
+		math.Pow(v2.X-v.X, 2) +
+			math.Pow(v2.Y-v.Y, 2),
+	)
+}
+
 // Translate returns the translation of a vector
 // towards direction d by magnitude m.
 func (v Vec2) Translate(d float64, m float64) Vec2 {
 	return Vec2{
 		X: v.X + math.Cos(d)*m,
-		Y: v.Y - math.Sin(d)*m,
+		Y: v.Y + math.Sin(d)*m,
 	}
 }
