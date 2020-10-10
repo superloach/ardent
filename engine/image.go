@@ -16,6 +16,10 @@ type Image interface {
 	// in radians relative to the origin.
 	Rotate(float64)
 
+	// SetZDepth sets a z value
+	// to override draw order.
+	SetZDepth(int)
+
 	// Size returns the size of the image.
 	Size() (int, int)
 

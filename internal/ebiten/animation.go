@@ -8,7 +8,7 @@ import (
 )
 
 type Animation struct {
-	img   *ebiten.Image
+	*Image
 	state string
 
 	w, h                     uint16
@@ -16,12 +16,6 @@ type Animation struct {
 
 	anims map[string]common.Animation
 	cache map[uint16]*ebiten.Image
-
-	tx, ty float64
-	sx, sy float64
-	d      float64
-
-	disposed bool
 }
 
 func (a *Animation) SetState(state string) {
@@ -44,28 +38,8 @@ func (a *Animation) tick() {
 	a.fpsCounter++
 }
 
-func (a *Animation) Translate(x, y float64) {
-	a.tx, a.ty = x, y
-}
-
-func (a *Animation) Scale(x, y float64) {
-	a.sx, a.sy = x, y
-}
-
-func (a *Animation) Rotate(d float64) {
-	a.d = d
-}
-
 func (a *Animation) Size() (int, int) {
 	return int(a.w), int(a.h)
-}
-
-func (a *Animation) Dispose() {
-	a.disposed = true
-}
-
-func (a *Animation) IsDisposed() bool {
-	return a.disposed
 }
 
 func (a *Animation) getFrame() *ebiten.Image {

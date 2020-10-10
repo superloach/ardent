@@ -10,6 +10,8 @@ type Image struct {
 	sx, sy float64
 	d      float64
 
+	z int
+
 	disposed bool
 }
 
@@ -26,6 +28,11 @@ func (i *Image) Scale(x, y float64) {
 // Rotate sets the image rotation.
 func (i *Image) Rotate(d float64) {
 	i.d = d
+}
+
+// SetZDepth sets the z order override.
+func (i *Image) SetZDepth(z int) {
+	i.z = z
 }
 
 // Size returns the image size.

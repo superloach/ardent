@@ -138,6 +138,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 					sx:  a.sx,
 					sy:  a.sy,
 					d:   a.d,
+					z:   a.z,
 				},
 			}
 
@@ -171,6 +172,10 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			}
 
 			return ty1 < ty2
+		})
+
+		sort.SliceStable(layer, func(i, j int) bool {
+			return layer[i].img.z < layer[j].img.z
 		})
 
 		for _, isoImage := range layer {

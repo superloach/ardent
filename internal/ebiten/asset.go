@@ -48,13 +48,15 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 	case common.AssetTypeAnimation:
 		img, _ := ebiten.NewImageFromImage(ca.Img, ebiten.FilterDefault)
 		a.animation = &Animation{
-			img:   img,
+			Image: &Image{
+				img: img,
+				sx:  1,
+				sy:  1,
+			},
 			w:     ca.AnimWidth,
 			h:     ca.AnimHeight,
 			anims: ca.AnimationMap,
 			cache: make(map[uint16]*ebiten.Image),
-			sx:    1,
-			sy:    1,
 		}
 	case common.AssetTypeSound:
 	default:
