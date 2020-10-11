@@ -10,6 +10,8 @@ type Entity interface {
 	AddImage(...Image)
 	Images() []Image
 
+	Class() string
+
 	Dispose()
 	IsDisposed() bool
 }
