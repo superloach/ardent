@@ -22,6 +22,10 @@ type Image interface {
 	// in radians relative to the origin.
 	Rotate(float64)
 
+	// Origin sets the coordinate
+	// origin of the image.
+	Origin(float64, float64)
+
 	// SetZDepth sets a z value
 	// to override draw order.
 	SetZDepth(int)

@@ -16,7 +16,7 @@ type Entity interface {
 
 type CoreEntity struct {
 	Vec2
-	prevPos, Origin Vec2
+	prevPos Vec2
 
 	images []Image
 
@@ -31,11 +31,7 @@ func (e *CoreEntity) Tick() {
 	}
 
 	for _, img := range e.images {
-		w, h := img.Size()
-		img.Translate(
-			e.X-e.Origin.X*float64(w),
-			e.Y-e.Origin.Y*float64(h),
-		)
+		img.Translate(e.X, e.Y)
 	}
 }
 

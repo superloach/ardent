@@ -124,17 +124,20 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 
 		switch img.(type) {
 		case *Image:
-			tmpImage = &isoRendererImage{
-				img: img.(*Image),
-			}
+			i := img.(*Image)
+			w, h := i.Size()
+			i.tx -= i.originX * float64(w)
+			i.ty -= i.originY * float64(h)
+			tmpImage = &isoRendererImage{img: i}
 
 		case *Animation:
 			a := img.(*Animation)
+			w, h := a.Size()
 			tmpImage = &isoRendererImage{
 				img: &Image{
 					img: a.getFrame(),
-					tx:  a.tx,
-					ty:  a.ty,
+					tx:  a.tx - a.originX*float64(w),
+					ty:  a.ty - a.originY*float64(h),
 					ox:  a.ox,
 					oy:  a.oy,
 					sx:  a.sx,
@@ -192,7 +195,10 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			img := isoImage.img
 
 			op := new(ebiten.DrawImageOptions)
-			op.GeoM.Translate(img.tx+img.ox-cx, img.ty+img.oy-cy)
+			op.GeoM.Translate(
+				img.tx+img.ox-cx,
+				img.ty+img.oy-cy,
+			)
 			op.GeoM.Scale(img.sx, img.sy)
 			op.GeoM.Rotate(img.d)
 

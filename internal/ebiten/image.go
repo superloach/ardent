@@ -11,6 +11,8 @@ type Image struct {
 	sx, sy float64
 	d      float64
 
+	originX, originY float64
+
 	z int
 
 	disposed bool
@@ -34,6 +36,11 @@ func (i *Image) Scale(x, y float64) {
 // Rotate sets the image rotation.
 func (i *Image) Rotate(d float64) {
 	i.d = d
+}
+
+// Origin sets the image origin by percent.
+func (i *Image) Origin(x, y float64) {
+	i.originX, i.originY = x, y
 }
 
 // SetZDepth sets the z order override.

@@ -20,6 +20,8 @@ func (i Image) Rotate(d float64) {
 	// NOOP
 }
 
+func (i Image) Origin(x, y float64) {}
+
 func (i Image) SetZDepth(z int) {}
 
 // Size returns the image size.
