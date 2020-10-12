@@ -9,11 +9,9 @@ import (
 )
 
 type IsoRenderer struct {
-	tilemap *common.Tilemap
-	camera  engine.Camera
-	images  []engine.Image
+	Renderer
 
-	w, h int
+	tilemap *common.Tilemap
 }
 
 type isoRendererImage struct {
@@ -24,36 +22,6 @@ type isoRendererImage struct {
 
 func (r *IsoRenderer) SetTilemap(tilemap engine.Tilemap) {
 	r.tilemap = tilemap.(*common.Tilemap)
-}
-
-func (r *IsoRenderer) SetCamera(camera engine.Camera) {
-	r.camera = camera
-}
-
-func (r *IsoRenderer) AddImage(images ...engine.Image) {
-	r.images = append(r.images, images...)
-}
-
-func (r *IsoRenderer) Tick() {
-	var i int
-	for _, img := range r.images {
-		if img.IsDisposed() {
-			continue
-		}
-
-		anim, ok := img.(*Animation)
-		if ok {
-			anim.tick()
-		}
-
-		r.images[i] = img
-		i++
-	}
-
-	for j := i; j < len(r.images); j++ {
-		r.images[j] = nil
-	}
-	r.images = r.images[:i]
 }
 
 func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
@@ -119,7 +87,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 
 	layers := r.tilemapToIsoLayers(cx, cy)
 
-	for _, img := range r.images {
+	for _, img := range r.imgs {
 		var tmpImage *isoRendererImage
 
 		switch img.(type) {
@@ -135,15 +103,17 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			w, h := a.Size()
 			tmpImage = &isoRendererImage{
 				img: &Image{
-					img: a.getFrame(),
-					tx:  a.tx - a.originX*float64(w),
-					ty:  a.ty - a.originY*float64(h),
-					ox:  a.ox,
-					oy:  a.oy,
-					sx:  a.sx,
-					sy:  a.sy,
-					d:   a.d,
-					z:   a.z,
+					img:     a.getFrame(),
+					tx:      a.tx - a.originX*float64(w),
+					ty:      a.ty - a.originY*float64(h),
+					ox:      a.ox,
+					oy:      a.oy,
+					sx:      a.sx,
+					sy:      a.sy,
+					originX: a.originX,
+					originY: a.originY,
+					d:       a.d,
+					z:       a.z,
 				},
 			}
 
@@ -195,18 +165,25 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			img := isoImage.img
 
 			op := new(ebiten.DrawImageOptions)
+			w, h := img.Size()
+
+			op.GeoM.Translate(
+				-img.originX*float64(w),
+				-img.originY*float64(h),
+			)
+			op.GeoM.Rotate(img.d)
+			op.GeoM.Translate(
+				img.originX*float64(w),
+				img.originY*float64(h),
+			)
+
 			op.GeoM.Translate(
 				img.tx+img.ox-cx,
 				img.ty+img.oy-cy,
 			)
 			op.GeoM.Scale(img.sx, img.sy)
-			op.GeoM.Rotate(img.d)
 
 			screen.DrawImage(img.img, op)
 		}
 	}
-}
-
-func (r *IsoRenderer) setViewport(w, h int) {
-	r.w, r.h = w, h
 }

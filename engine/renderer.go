@@ -9,5 +9,7 @@ type Renderer interface {
 
 	SetCamera(Camera)
 
+	ScreenToWorld(Vec2) Vec2
+
 	Tick()
 }

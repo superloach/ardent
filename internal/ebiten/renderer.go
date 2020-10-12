@@ -22,6 +22,17 @@ func (r *Renderer) SetCamera(camera engine.Camera) {
 	r.camera = camera
 }
 
+func (r *Renderer) ScreenToWorld(screen engine.Vec2) engine.Vec2 {
+	var cx, cy float64
+
+	if r.camera != nil {
+		cx, cy = r.camera.Position()
+		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
+	}
+
+	return engine.Vec2{cx + screen.X, cy + screen.Y}
+}
+
 func (r *Renderer) Tick() {
 	var i int
 	for _, img := range r.imgs {

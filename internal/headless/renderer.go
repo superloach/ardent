@@ -16,4 +16,8 @@ func (r Renderer) SetCamera(camera engine.Camera) {
 
 }
 
+func (r Renderer) ScreenToWorld(screen engine.Vec2) engine.Vec2 {
+	return engine.Vec2{}
+}
+
 func (r Renderer) Tick() {}
