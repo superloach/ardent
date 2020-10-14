@@ -1,6 +1,8 @@
 package ebiten
 
 import (
+	"math"
+
 	"github.com/hajimehoshi/ebiten"
 	"github.com/split-cube-studios/ardent/engine"
 )
@@ -30,7 +32,16 @@ func (r *Renderer) ScreenToWorld(screen engine.Vec2) engine.Vec2 {
 		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
 
-	return engine.Vec2{cx + screen.X, cy + screen.Y}
+	sx := math.Min(
+		math.Max(screen.X, 0),
+		float64(r.w),
+	)
+	sy := math.Min(
+		math.Max(screen.Y, 0),
+		float64(r.h),
+	)
+
+	return engine.Vec2{cx + sx, cy + sy}
 }
 
 func (r *Renderer) Tick() {
