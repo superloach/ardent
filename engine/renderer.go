@@ -11,5 +11,7 @@ type Renderer interface {
 
 	ScreenToWorld(Vec2) Vec2
 
+	SetViewport(int, int)
+
 	Tick()
 }

@@ -74,12 +74,11 @@ func (g *Game) Update(screen *ebiten.Image) error {
 	}
 
 	for _, renderer := range g.renderers {
+		renderer.SetViewport(g.w, g.h)
 		switch renderer.(type) {
 		case *Renderer:
-			renderer.(*Renderer).setViewport(g.w, g.h)
 			renderer.(*Renderer).draw(screen)
 		case *IsoRenderer:
-			renderer.(*IsoRenderer).setViewport(g.w, g.h)
 			renderer.(*IsoRenderer).draw(screen)
 		}
 	}

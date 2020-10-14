@@ -100,6 +100,6 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 	}
 }
 
-func (r *Renderer) setViewport(w, h int) {
+func (r *Renderer) SetViewport(w, h int) {
 	r.w, r.h = w, h
 }
