@@ -2,6 +2,7 @@ package ebiten
 
 import (
 	"math"
+	"sort"
 
 	"github.com/hajimehoshi/ebiten"
 	"github.com/split-cube-studios/ardent/engine"
@@ -80,6 +81,11 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 		cx, cy = r.camera.Position()
 		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
+
+	sort.Slice(r.imgs, func(i, j int) bool {
+		z1, z2 := r.imgs[i].(*Image).z, r.imgs[j].(*Image).z
+		return z1 < z2
+	})
 
 	for _, img := range r.imgs {
 		switch img.(type) {
