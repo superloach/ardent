@@ -6,7 +6,8 @@ type Context struct {
 	Renderer
 	Collider
 
-	entities map[string][]Entity
+	entities   map[string][]Entity
+	entitySwap []Entity
 }
 
 func NewContext(renderer Renderer, collider Collider) *Context {
@@ -18,7 +19,11 @@ func NewContext(renderer Renderer, collider Collider) *Context {
 }
 
 func (c *Context) AddEntity(entities ...Entity) {
-	for _, e := range entities {
+	c.entitySwap = append(c.entitySwap, entities...)
+}
+
+func (c *Context) Tick() {
+	for i, e := range c.entitySwap {
 		if c.Collider != nil {
 			e.SetCollider(c.Collider)
 		}
@@ -28,10 +33,11 @@ func (c *Context) AddEntity(entities ...Entity) {
 			c.entities[e.Class()],
 			e,
 		)
-	}
-}
 
-func (c *Context) Tick() {
+		c.entitySwap[i] = nil
+	}
+	c.entitySwap = c.entitySwap[:0]
+
 	for class, entities := range c.entities {
 		var i int
 		for _, e := range entities {
