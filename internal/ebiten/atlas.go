@@ -11,7 +11,7 @@ import (
 type Atlas struct {
 	img     *ebiten.Image
 	regions map[string]common.AtlasRegion
-	cache   map[string]engine.Image
+	cache   map[string]Image
 }
 
 func (a *Atlas) GetImage(k string) engine.Image {
@@ -22,7 +22,7 @@ func (a *Atlas) GetImage(k string) engine.Image {
 
 	eImg, ok := a.cache[k]
 	if ok {
-		return eImg
+		return &eImg
 	}
 
 	img := a.img.SubImage(
@@ -34,11 +34,12 @@ func (a *Atlas) GetImage(k string) engine.Image {
 		),
 	)
 
-	a.cache[k] = &Image{
+	cacheImg := Image{
 		img: img.(*ebiten.Image),
 		sx:  1,
 		sy:  1,
 	}
+	a.cache[k] = cacheImg
 
-	return a.cache[k]
+	return &cacheImg
 }

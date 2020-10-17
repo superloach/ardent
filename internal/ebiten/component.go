@@ -16,9 +16,21 @@ import (
 	"golang.org/x/image/font"
 )
 
-type component struct{}
+type component struct {
+	assetCache map[string]Asset
+}
 
-func (c component) NewAssetFromPath(path string) (engine.Asset, error) {
+func newComponent() *component {
+	return &component{
+		assetCache: make(map[string]Asset),
+	}
+}
+
+func (c *component) NewAssetFromPath(path string) (engine.Asset, error) {
+	if asset, ok := c.assetCache[path]; ok {
+		return &asset, nil
+	}
+
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to open asset path: %w", err)
@@ -31,10 +43,16 @@ func (c component) NewAssetFromPath(path string) (engine.Asset, error) {
 		return nil, fmt.Errorf("Failed to decode asset: %w", err)
 	}
 
-	return a, a.UnmarshalBinary(d)
+	if err = a.UnmarshalBinary(d); err != nil {
+		return nil, err
+	}
+
+	c.assetCache[path] = *a
+
+	return a, nil
 }
 
-func (c component) NewImageFromPath(path string) (engine.Image, error) {
+func (c *component) NewImageFromPath(path string) (engine.Image, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to open image path: %w", err)
@@ -49,7 +67,7 @@ func (c component) NewImageFromPath(path string) (engine.Image, error) {
 	return c.NewImageFromImage(img), nil
 }
 
-func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
+func (c *component) NewImageFromAssetPath(path string) (engine.Image, error) {
 	a, err := c.NewAssetFromPath(path)
 	if err != nil {
 		return nil, err
@@ -58,7 +76,7 @@ func (c component) NewImageFromAssetPath(path string) (engine.Image, error) {
 	return a.ToImage(), nil
 }
 
-func (c component) NewImageFromImage(img image.Image) engine.Image {
+func (c *component) NewImageFromImage(img image.Image) engine.Image {
 	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterNearest)
 	return &Image{
 		img: eimg,
@@ -67,7 +85,7 @@ func (c component) NewImageFromImage(img image.Image) engine.Image {
 	}
 }
 
-func (c component) NewTextImage(txt string, w, h int, face font.Face, clr color.Color) engine.Image {
+func (c *component) NewTextImage(txt string, w, h int, face font.Face, clr color.Color) engine.Image {
 	img, _ := ebiten.NewImage(w, h, ebiten.FilterNearest)
 	text.Draw(img, txt, face, 0, face.Metrics().Height.Round(), clr)
 	return &Image{
@@ -77,7 +95,7 @@ func (c component) NewTextImage(txt string, w, h int, face font.Face, clr color.
 	}
 }
 
-func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
+func (c *component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
 	a, err := c.NewAssetFromPath(path)
 	if err != nil {
 		return nil, err
@@ -86,7 +104,7 @@ func (c component) NewAtlasFromAssetPath(path string) (engine.Atlas, error) {
 	return a.ToAtlas(), nil
 }
 
-func (c component) NewAnimationFromAssetPath(path string) (engine.Animation, error) {
+func (c *component) NewAnimationFromAssetPath(path string) (engine.Animation, error) {
 	a, err := c.NewAssetFromPath(path)
 	if err != nil {
 		return nil, err
@@ -95,15 +113,15 @@ func (c component) NewAnimationFromAssetPath(path string) (engine.Animation, err
 	return a.ToAnimation(), nil
 }
 
-func (c component) NewRenderer() engine.Renderer {
+func (c *component) NewRenderer() engine.Renderer {
 	return new(Renderer)
 }
 
-func (c component) NewIsoRenderer() engine.IsoRenderer {
+func (c *component) NewIsoRenderer() engine.IsoRenderer {
 	return new(IsoRenderer)
 }
 
-func (c component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.Image) engine.Tilemap {
+func (c *component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.Image) engine.Tilemap {
 	return &common.Tilemap{
 		Width:  width,
 		Data:   data,
@@ -111,10 +129,10 @@ func (c component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.
 	}
 }
 
-func (c component) NewCamera() engine.Camera {
+func (c *component) NewCamera() engine.Camera {
 	return new(common.Camera)
 }
 
-func (c component) NewCollider() engine.Collider {
+func (c *component) NewCollider() engine.Collider {
 	return new(common.Collider)
 }

@@ -17,7 +17,7 @@ type Game struct {
 
 	renderers []engine.Renderer
 
-	component
+	*component
 	Input
 }
 
@@ -36,6 +36,7 @@ func NewGame(
 		flags:      flags,
 		tickFunc:   tickFunc,
 		layoutFunc: layoutFunc,
+		component:  newComponent(),
 	}
 }
 
