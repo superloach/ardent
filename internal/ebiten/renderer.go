@@ -70,11 +70,12 @@ func (r *Renderer) Tick() {
 // draw renders all images in the draw stack.
 func (r *Renderer) draw(screen *ebiten.Image) {
 	var (
-		eimg   *ebiten.Image
-		tx, ty float64
-		sx, sy float64
-		d      float64
-		cx, cy float64
+		eimg             *ebiten.Image
+		tx, ty           float64
+		originX, originY float64
+		sx, sy           float64
+		d                float64
+		cx, cy           float64
 	)
 
 	if r.camera != nil {
@@ -94,6 +95,7 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 			eimg = i.img
 			tx, ty = i.tx, i.ty
 			sx, sy = i.sx, i.sy
+			originX, originY = i.originX, i.originY
 			d = i.d
 
 		case *Animation:
@@ -101,6 +103,7 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 			eimg = a.getFrame()
 			tx, ty = a.tx, a.ty
 			sx, sy = a.sx, a.sy
+			originX, originY = a.originX, a.originY
 			d = a.d
 
 		default:
@@ -109,7 +112,9 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 		op := new(ebiten.DrawImageOptions)
 
-		op.GeoM.Translate(tx-cx, ty-cy)
+		w, h := eimg.Size()
+
+		op.GeoM.Translate(tx-cx-originX*float64(w), ty-cy-originY*float64(h))
 		op.GeoM.Scale(sx, sy)
 		op.GeoM.Rotate(d)
 
