@@ -18,6 +18,9 @@ type Renderer struct {
 
 // AddImage adds images to the draw stack.
 func (r *Renderer) AddImage(images ...engine.Image) {
+	for _, img := range images {
+		img.(disposable).Undispose()
+	}
 	r.imgs = append(r.imgs, images...)
 }
 

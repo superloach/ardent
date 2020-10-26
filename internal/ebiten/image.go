@@ -58,7 +58,19 @@ func (i *Image) Dispose() {
 	i.disposed = true
 }
 
+// Undispose resets the disposed state of the image.
+func (i *Image) Undispose() {
+	i.disposed = false
+}
+
 // IsDisposed indicates if the image has been dispoed.
 func (i *Image) IsDisposed() bool {
 	return i.disposed
+}
+
+// disposable describes behavior for disposable resources.
+type disposable interface {
+	Dispose()
+	Undispose()
+	IsDisposed() bool
 }
