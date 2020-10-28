@@ -8,7 +8,7 @@ import (
 )
 
 type Animation struct {
-	*Image
+	Image
 	state string
 
 	w, h                     uint16

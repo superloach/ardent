@@ -48,7 +48,7 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 	case common.AssetTypeAnimation:
 		img, _ := ebiten.NewImageFromImage(ca.Img, ebiten.FilterDefault)
 		a.animation = Animation{
-			Image: &Image{
+			Image: Image{
 				img: img,
 				sx:  1,
 				sy:  1,
