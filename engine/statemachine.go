@@ -19,8 +19,8 @@ func NewStateMachine() *StateMachine {
 	}
 }
 
-// SetState marks a given state as active or not.
-func (sm *StateMachine) SetState(state uint64, active bool) {
+// UpdateState marks a given state as active or not.
+func (sm *StateMachine) UpdateState(state uint64, active bool) {
 	if active {
 		sm.state |= state
 	} else {
@@ -28,11 +28,11 @@ func (sm *StateMachine) SetState(state uint64, active bool) {
 	}
 }
 
-// SetStateExclusive deactivates all previous states and only
+// SetState deactivates all previous states and only
 // sets the state specified.
-func (sm *StateMachine) SetStateExclusive(state uint64, active bool) {
+func (sm *StateMachine) SetState(state uint64, active bool) {
 	sm.SetAll(false)
-	sm.SetState(state, active)
+	sm.UpdateState(state, active)
 }
 
 // SetAll marks all states as active or not.

@@ -22,6 +22,10 @@ func (c *Context) AddEntity(entities ...Entity) {
 	c.entitySwap = append(c.entitySwap, entities...)
 }
 
+func (c *Context) GetEntities(class string) []Entity {
+	return c.entities[class]
+}
+
 func (c *Context) Tick() {
 	for i, e := range c.entitySwap {
 		if c.Collider != nil {

@@ -29,3 +29,18 @@ var CardinalToAngle = map[byte]float64{
 	NE: -(math.Pi / 6) + diag,      // 333.435
 	NW: math.Pi + math.Pi/6 - diag, // 206.565,
 }
+
+func AngleToCardinal(angle float64) byte {
+	var cardinal byte
+	closest := math.MaxFloat64
+
+	for k, v := range CardinalToAngle {
+		diff := math.Abs(angle - v)
+		if diff < math.Abs(closest) {
+			cardinal = k
+			closest = diff
+		}
+	}
+
+	return cardinal
+}
