@@ -16,6 +16,8 @@ type Animation struct {
 
 	anims map[string]common.Animation
 	cache map[uint16]*ebiten.Image
+
+	paused bool
 }
 
 func (a *Animation) SetState(state string) {
@@ -27,7 +29,24 @@ func (a *Animation) SetState(state string) {
 	a.fpsCounter, a.frameCounter = 0, 0
 }
 
+func (a *Animation) Play() {
+	a.paused = false
+}
+
+func (a *Animation) Pause() {
+	a.paused = true
+}
+
+func (a *Animation) Reset() {
+	a.frameCounter = 0
+	a.fpsCounter = 0
+}
+
 func (a *Animation) tick() {
+	if a.paused {
+		return
+	}
+
 	fps := a.anims[a.state].Fps
 	if a.fpsCounter == 60/fps {
 		a.frameCounter++
