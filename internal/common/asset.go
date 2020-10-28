@@ -74,10 +74,14 @@ func (a *Asset) MarshalBinary() ([]byte, error) {
 			buf.WriteString(k)
 			buf.WriteByte(0)
 
-			data = make([]byte, 6)
+			data = make([]byte, 7)
 			binary.LittleEndian.PutUint16(data[:2], v.Fps)
 			binary.LittleEndian.PutUint16(data[2:4], v.Start)
 			binary.LittleEndian.PutUint16(data[4:6], v.End)
+
+			if v.Loop {
+				data[6] = 1
+			}
 
 			buf.Write(data)
 		}
@@ -167,7 +171,7 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 				return err
 			}
 
-			animData := make([]byte, 6)
+			animData := make([]byte, 7)
 			if n, err := buf.Read(animData); n != len(animData) {
 				if err != nil {
 					return err
@@ -175,11 +179,17 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 				return fmt.Errorf("Expected %d bytes, go %d", len(animData), n)
 			}
 
-			a.AnimationMap[k[:len(k)-1]] = Animation{
+			anim := Animation{
 				Fps:   binary.LittleEndian.Uint16(animData[:2]),
 				Start: binary.LittleEndian.Uint16(animData[2:4]),
 				End:   binary.LittleEndian.Uint16(animData[4:6]),
 			}
+
+			if animData[6] > 0 {
+				anim.Loop = true
+			}
+
+			a.AnimationMap[k[:len(k)-1]] = anim
 		}
 
 	case AssetTypeSound:

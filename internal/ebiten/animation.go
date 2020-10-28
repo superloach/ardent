@@ -26,7 +26,7 @@ func (a *Animation) SetState(state string) {
 	}
 
 	a.state = state
-	a.fpsCounter, a.frameCounter = 0, 0
+	a.Reset()
 }
 
 func (a *Animation) Play() {
@@ -38,8 +38,7 @@ func (a *Animation) Pause() {
 }
 
 func (a *Animation) Reset() {
-	a.frameCounter = 0
-	a.fpsCounter = 0
+	a.fpsCounter, a.frameCounter = 0, 0
 }
 
 func (a *Animation) tick() {
@@ -67,7 +66,13 @@ func (a *Animation) getFrame() *ebiten.Image {
 		return nil
 	}
 
-	frameKey := (a.frameCounter % (anim.End - anim.Start)) + anim.Start
+	var frameKey uint16
+	if !anim.Loop && a.frameCounter >= anim.End-anim.Start {
+		frameKey = anim.End
+	} else {
+		frameKey = (a.frameCounter % (anim.End - anim.Start)) + anim.Start
+	}
+
 	frame, ok := a.cache[frameKey]
 	if ok {
 		return frame

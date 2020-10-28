@@ -25,9 +25,10 @@ type config struct {
 	FrameHeight int `yml:"frameheight,omitempty"`
 
 	Animations map[string]struct {
-		Fps   int `yml:"fps"`
-		Start int `yml:"start"`
-		End   int `yml:"end"`
+		Fps   int  `yml:"fps"`
+		Loop  bool `yml:"loop,omitempty"`
+		Start int  `yml:"start"`
+		End   int  `yml:"end"`
 	} `yml:"animations,omitempty"`
 }
 
@@ -55,6 +56,7 @@ func (c config) toAsset() (*common.Asset, error) {
 		for k, v := range c.Animations {
 			asset.AnimationMap[k] = common.Animation{
 				Fps:   uint16(v.Fps),
+				Loop:  v.Loop,
 				Start: uint16(v.Start),
 				End:   uint16(v.End),
 			}
