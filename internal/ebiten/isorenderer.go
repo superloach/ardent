@@ -62,11 +62,16 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
 
 				layers[i] = append(layers[i], &isoRendererImage{
 					img: &Image{
-						img: img.(*Image).img,
-						tx:  x,
-						ty:  y,
-						sx:  1,
-						sy:  1,
+						img:        img.(*Image).img,
+						tx:         x,
+						ty:         y,
+						sx:         1,
+						sy:         1,
+						r:          1,
+						g:          1,
+						b:          1,
+						alpha:      1,
+						renderable: true,
 					},
 					isTile:     true,
 					tileHeight: tw / 2,
@@ -88,6 +93,10 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 	layers := r.tilemapToIsoLayers(cx, cy)
 
 	for _, img := range r.imgs {
+		if !img.IsRenderable() {
+			continue
+		}
+
 		var tmpImage *isoRendererImage
 
 		switch img.(type) {
@@ -103,17 +112,22 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			w, h := a.Size()
 			tmpImage = &isoRendererImage{
 				img: &Image{
-					img:     a.getFrame(),
-					tx:      a.tx - a.originX*float64(w),
-					ty:      a.ty - a.originY*float64(h),
-					ox:      a.ox,
-					oy:      a.oy,
-					sx:      a.sx,
-					sy:      a.sy,
-					originX: a.originX,
-					originY: a.originY,
-					d:       a.d,
-					z:       a.z,
+					img:        a.getFrame(),
+					tx:         a.tx - a.originX*float64(w),
+					ty:         a.ty - a.originY*float64(h),
+					ox:         a.ox,
+					oy:         a.oy,
+					sx:         a.sx,
+					sy:         a.sy,
+					originX:    a.originX,
+					originY:    a.originY,
+					d:          a.d,
+					z:          a.z,
+					r:          a.r,
+					g:          a.g,
+					b:          a.b,
+					alpha:      a.alpha,
+					renderable: a.renderable,
 				},
 			}
 
@@ -125,7 +139,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 	}
 
 	for _, layer := range layers {
-		sort.Slice(layer, func(i, j int) bool {
+		sort.SliceStable(layer, func(i, j int) bool {
 			var ty1, ty2 float64
 
 			tileOverlap := layer[i].isTile || layer[j].isTile
@@ -167,6 +181,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			op := new(ebiten.DrawImageOptions)
 			w, h := img.Size()
 
+			op.GeoM.Scale(img.sx, img.sy)
 			op.GeoM.Translate(
 				-img.originX*float64(w),
 				-img.originY*float64(h),
@@ -181,7 +196,8 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 				img.tx+img.ox-cx,
 				img.ty+img.oy-cy,
 			)
-			op.GeoM.Scale(img.sx, img.sy)
+
+			op.ColorM.Scale(img.r, img.g, img.b, img.alpha)
 
 			screen.DrawImage(img.img, op)
 		}

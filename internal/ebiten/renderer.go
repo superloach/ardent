@@ -79,6 +79,8 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 		sx, sy           float64
 		d                float64
 		cx, cy           float64
+		red, green, blue float64
+		alpha            float64
 	)
 
 	if r.camera != nil {
@@ -86,28 +88,36 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
 
-	sort.Slice(r.imgs, func(i, j int) bool {
+	sort.SliceStable(r.imgs, func(i, j int) bool {
 		z1, z2 := r.imgs[i].(*Image).z, r.imgs[j].(*Image).z
 		return z1 < z2
 	})
 
 	for _, img := range r.imgs {
+		if !img.IsRenderable() {
+			continue
+		}
+
 		switch img.(type) {
 		case *Image:
 			i := img.(*Image)
 			eimg = i.img
-			tx, ty = i.tx, i.ty
+			tx, ty = i.tx+i.ox, i.ty+i.oy
 			sx, sy = i.sx, i.sy
 			originX, originY = i.originX, i.originY
 			d = i.d
+			red, green, blue = i.r, i.g, i.b
+			alpha = i.alpha
 
 		case *Animation:
 			a := img.(*Animation)
 			eimg = a.getFrame()
-			tx, ty = a.tx, a.ty
+			tx, ty = a.tx+a.ox, a.ty+a.oy
 			sx, sy = a.sx, a.sy
 			originX, originY = a.originX, a.originY
 			d = a.d
+			red, green, blue = a.r, a.g, a.b
+			alpha = a.alpha
 
 		default:
 			panic("Invalid image type")
@@ -117,9 +127,11 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 		w, h := eimg.Size()
 
-		op.GeoM.Translate(tx-cx-originX*float64(w), ty-cy-originY*float64(h))
 		op.GeoM.Scale(sx, sy)
+		op.GeoM.Translate(tx-cx-originX*float64(w), ty-cy-originY*float64(h))
 		op.GeoM.Rotate(d)
+
+		op.ColorM.Scale(red, green, blue, alpha)
 
 		screen.DrawImage(eimg, op)
 	}

@@ -24,6 +24,16 @@ func (i Image) Origin(x, y float64) {}
 
 func (i Image) SetZDepth(z int) {}
 
+func (i Image) Tint(r, g, b float64) {}
+
+func (i Image) SetRenderable(r bool) {}
+
+func (i Image) IsRenderable() bool {
+	return true
+}
+
+func (i Image) Alpha(alpha float64) {}
+
 // Size returns the image size.
 func (i Image) Size() (int, int) {
 	return 0, 0

@@ -30,6 +30,22 @@ type Image interface {
 	// to override draw order.
 	SetZDepth(int)
 
+	// Tint scales the image colors by a factor
+	// of each value.
+	Tint(float64, float64, float64)
+
+	// Alpha sets the image's alpha channel
+	// with a range of 0.0 to 1.0
+	Alpha(float64)
+
+	// SetRenderable sets whether or not
+	// an image should be renderered.
+	SetRenderable(bool)
+
+	// IsRenderable indicates whether or not
+	// an image should be renderered.
+	IsRenderable() bool
+
 	// Size returns the size of the image.
 	Size() (int, int)
 

@@ -13,9 +13,13 @@ type Image struct {
 
 	originX, originY float64
 
+	r, g, b float64
+	alpha   float64
+
 	z int
 
-	disposed bool
+	renderable bool
+	disposed   bool
 }
 
 // Translate sets the image translation.
@@ -46,6 +50,26 @@ func (i *Image) Origin(x, y float64) {
 // SetZDepth sets the z order override.
 func (i *Image) SetZDepth(z int) {
 	i.z = z
+}
+
+// Tint sets the color scale of the image.
+func (i *Image) Tint(r, g, b float64) {
+	i.r, i.g, i.b = r, g, b
+}
+
+// Alpha sets the alpha channel of the image.
+func (i *Image) Alpha(alpha float64) {
+	i.alpha = alpha
+}
+
+// SetRenderable sets the render state of the image.
+func (i *Image) SetRenderable(r bool) {
+	i.renderable = r
+}
+
+// IsRenderable returns the render state of the image.
+func (i *Image) IsRenderable() bool {
+	return i.renderable
 }
 
 // Size returns the image size.
