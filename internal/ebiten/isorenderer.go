@@ -99,6 +99,8 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 
 		var tmpImage *isoRendererImage
 
+		var x, y float64
+
 		switch img.(type) {
 		case *Image:
 			i := img.(*Image)
@@ -106,6 +108,8 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			i.tx -= i.originX * float64(w)
 			i.ty -= i.originY * float64(h)
 			tmpImage = &isoRendererImage{img: i}
+
+			x, y = i.tx, i.ty
 
 		case *Animation:
 			a := img.(*Animation)
@@ -131,8 +135,18 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 				},
 			}
 
+			x, y = a.tx, a.ty
+
 		default:
 			panic("Invalid image type")
+		}
+
+		if x-cx < -800 || x-cx > float64(r.w+800) {
+			continue
+		}
+
+		if y-cy < -800 || y-cy > float64(r.h+800) {
+			continue
 		}
 
 		layers[len(layers)-1] = append(layers[len(layers)-1], tmpImage)
