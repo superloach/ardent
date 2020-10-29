@@ -23,3 +23,7 @@ func (r Renderer) ScreenToWorld(screen engine.Vec2) engine.Vec2 {
 func (r Renderer) SetViewport(w, h int) {}
 
 func (r Renderer) Tick() {}
+
+func (r Renderer) Cull(v engine.Vec2) bool {
+	return false
+}

@@ -29,8 +29,8 @@ type CoreEntity struct {
 func (e *CoreEntity) Tick() {
 	if e.collider != nil {
 		e.Vec2 = e.collider.Resolve(e.prevPos, e.Vec2)
-		e.prevPos = e.Vec2
 	}
+	e.prevPos = e.Vec2
 
 	for _, img := range e.images {
 		img.Translate(e.X, e.Y)

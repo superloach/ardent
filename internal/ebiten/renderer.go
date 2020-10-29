@@ -70,6 +70,24 @@ func (r *Renderer) Tick() {
 	r.imgs = r.imgs[:i]
 }
 
+func (r *Renderer) Cull(v engine.Vec2) bool {
+	var cx, cy float64
+	if r.camera != nil {
+		cx, cy = r.camera.Position()
+		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
+	}
+
+	if v.X-cx < -800 || v.X-cx > float64(r.w+800) {
+		return true
+	}
+
+	if v.Y-cy < -800 || v.Y-cy > float64(r.h+800) {
+		return true
+	}
+
+	return false
+}
+
 // draw renders all images in the draw stack.
 func (r *Renderer) draw(screen *ebiten.Image) {
 	var (

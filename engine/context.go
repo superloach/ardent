@@ -1,6 +1,8 @@
 package engine
 
-import "image"
+import (
+	"image"
+)
 
 type Context struct {
 	Renderer
@@ -49,6 +51,13 @@ func (c *Context) Tick() {
 				continue
 			}
 
+			if c.Cull(e.Position()) {
+				c.entities[class][i] = e
+				i++
+
+				continue
+			}
+
 			// TODO make this good
 			// spacial partitioning, etc
 			if hitbox, ok := e.(Hitbox); ok {
@@ -56,6 +65,10 @@ func (c *Context) Tick() {
 					for _, targetEntity := range c.entities[targetClass] {
 						targetHitbox, ok := targetEntity.(Hitbox)
 						if !ok {
+							continue
+						}
+
+						if c.Cull(targetEntity.Position()) {
 							continue
 						}
 

@@ -105,9 +105,26 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 		case *Image:
 			i := img.(*Image)
 			w, h := i.Size()
-			i.tx -= i.originX * float64(w)
-			i.ty -= i.originY * float64(h)
-			tmpImage = &isoRendererImage{img: i}
+			tmpImage = &isoRendererImage{
+				img: &Image{
+					img:        i.img,
+					tx:         i.tx - i.originX*float64(w),
+					ty:         i.ty - i.originY*float64(h),
+					ox:         i.ox,
+					oy:         i.oy,
+					sx:         i.sx,
+					sy:         i.sy,
+					originX:    i.originX,
+					originY:    i.originY,
+					d:          i.d,
+					z:          i.z,
+					r:          i.r,
+					g:          i.g,
+					b:          i.b,
+					alpha:      i.alpha,
+					renderable: i.renderable,
+				},
+			}
 
 			x, y = i.tx, i.ty
 

@@ -14,4 +14,6 @@ type Renderer interface {
 	SetViewport(int, int)
 
 	Tick()
+
+	Cull(Vec2) bool
 }
