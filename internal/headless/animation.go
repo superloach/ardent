@@ -6,6 +6,8 @@ type Animation struct {
 
 func (a Animation) SetState(state string) {}
 
+func (a Animation) SetTickCount(count int) {}
+
 func (a Animation) Play() {}
 
 func (a Animation) Pause() {}

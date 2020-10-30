@@ -29,6 +29,22 @@ func (a *Animation) SetState(state string) {
 	a.Reset()
 }
 
+func (a *Animation) SetTickCount(count int) {
+	fps := a.anims[a.state].Fps
+
+	a.frameCounter = uint16(count) / (60 / fps)
+
+	/*
+		if a.fpsCounter == 60/fps {
+			a.frameCounter++
+			a.fpsCounter = 0
+			return
+		}
+
+		a.fpsCounter++
+	*/
+}
+
 func (a *Animation) Play() {
 	a.paused = false
 }
