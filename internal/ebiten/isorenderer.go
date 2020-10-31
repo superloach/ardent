@@ -180,7 +180,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			_, h := img.Size()
 
 			if layer[i].isTile {
-				ty1 = img.ty + float64(h-layer[i].tileHeight/4)
+				ty1 = img.ty + float64(h-layer[i].tileHeight/8)
 			} else {
 				ty1 = img.ty + float64(h)
 			}
@@ -189,7 +189,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			_, h = img.Size()
 
 			if layer[j].isTile {
-				ty2 = img.ty + float64(h-layer[j].tileHeight/4)
+				ty2 = img.ty + float64(h-layer[j].tileHeight/8)
 			} else {
 				ty2 = img.ty + float64(h)
 			}
