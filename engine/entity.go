@@ -46,6 +46,9 @@ func (e *CoreEntity) Position() Vec2 {
 }
 
 func (e *CoreEntity) AddImage(image ...Image) {
+	for _, img := range image {
+		img.Translate(e.X, e.Y)
+	}
 	e.images = append(e.images, image...)
 }
 
