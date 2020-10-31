@@ -18,9 +18,10 @@ type Image struct {
 
 	z int
 
-	renderable        bool
-	roundTranslations bool
-	disposed          bool
+	renderable           bool
+	roundTranslations    bool
+	triggersOverlapEvent bool
+	disposed             bool
 }
 
 // Translate sets the image translation.
@@ -78,10 +79,17 @@ func (i *Image) Size() (int, int) {
 	return i.img.Size()
 }
 
-// Round translations sets whether or not
+// RoundTranslations sets whether or not
 // image translations will be rounded during rendering.
 func (i *Image) RoundTranslations(round bool) {
 	i.roundTranslations = round
+}
+
+// TriggersTileOverlapEvent determines whether or not
+// the tile overlap event will occur when this image
+// is behind a tile in the isometric renderer.
+func (i *Image) TriggersTileOverlapEvent(triggers bool) {
+	i.triggersOverlapEvent = triggers
 }
 
 // Dispose marks the image to be disposed.

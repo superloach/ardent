@@ -130,11 +130,17 @@ func (c *component) NewIsoRenderer() engine.IsoRenderer {
 	return new(IsoRenderer)
 }
 
-func (c *component) NewTilemap(width int, data [2][][]int, mapper map[int]engine.Image) engine.Tilemap {
+func (c *component) NewTilemap(
+	width int,
+	data [2][][]int,
+	mapper map[int]engine.Image,
+	overlapEvent engine.TileOverlapEvent,
+) engine.Tilemap {
 	return &common.Tilemap{
-		Width:  width,
-		Data:   data,
-		Mapper: mapper,
+		Width:        width,
+		Data:         data,
+		Mapper:       mapper,
+		OverlapEvent: overlapEvent,
 	}
 }
 

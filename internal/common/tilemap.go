@@ -7,9 +7,10 @@ import (
 )
 
 type Tilemap struct {
-	Width  int
-	Data   [2][][]int
-	Mapper map[int]engine.Image
+	Width        int
+	Data         [2][][]int
+	Mapper       map[int]engine.Image
+	OverlapEvent engine.TileOverlapEvent
 }
 
 func (t *Tilemap) IsoToIndex(x, y float64) (int, int) {

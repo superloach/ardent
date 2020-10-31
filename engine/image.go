@@ -52,6 +52,11 @@ type Image interface {
 	// Defaults to true.
 	RoundTranslations(bool)
 
+	// TriggersTileOverlapEvent determines whether or not
+	// the tile overlap event will occur when this image
+	// is behind a tile in the isometric renderer.
+	TriggersTileOverlapEvent(bool)
+
 	// Size returns the size of the image.
 	Size() (int, int)
 
