@@ -79,10 +79,12 @@ func (c *component) NewImageFromAssetPath(path string) (engine.Image, error) {
 func (c *component) NewImageFromImage(img image.Image) engine.Image {
 	eimg, _ := ebiten.NewImageFromImage(img, ebiten.FilterNearest)
 	return &Image{
-		img:   eimg,
-		sx:    1,
-		sy:    1,
-		alpha: 1,
+		img:               eimg,
+		sx:                1,
+		sy:                1,
+		alpha:             1,
+		renderable:        true,
+		roundTranslations: true,
 	}
 }
 
@@ -90,13 +92,15 @@ func (c *component) NewTextImage(txt string, w, h int, face font.Face, clr color
 	img, _ := ebiten.NewImage(w, h, ebiten.FilterNearest)
 	text.Draw(img, txt, face, 0, face.Metrics().Height.Round(), clr)
 	return &Image{
-		img:   img,
-		sx:    1,
-		sy:    1,
-		r:     1,
-		g:     1,
-		b:     1,
-		alpha: 1,
+		img:               img,
+		sx:                1,
+		sy:                1,
+		r:                 1,
+		g:                 1,
+		b:                 1,
+		alpha:             1,
+		renderable:        true,
+		roundTranslations: true,
 	}
 }
 

@@ -1,6 +1,7 @@
 package ebiten
 
 import (
+	"math"
 	"sort"
 
 	"github.com/hajimehoshi/ebiten"
@@ -107,22 +108,23 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			w, h := i.Size()
 			tmpImage = &isoRendererImage{
 				img: &Image{
-					img:        i.img,
-					tx:         i.tx - i.originX*float64(w),
-					ty:         i.ty - i.originY*float64(h),
-					ox:         i.ox,
-					oy:         i.oy,
-					sx:         i.sx,
-					sy:         i.sy,
-					originX:    i.originX,
-					originY:    i.originY,
-					d:          i.d,
-					z:          i.z,
-					r:          i.r,
-					g:          i.g,
-					b:          i.b,
-					alpha:      i.alpha,
-					renderable: i.renderable,
+					img:               i.img,
+					tx:                i.tx - i.originX*float64(w),
+					ty:                i.ty - i.originY*float64(h),
+					ox:                i.ox,
+					oy:                i.oy,
+					sx:                i.sx,
+					sy:                i.sy,
+					originX:           i.originX,
+					originY:           i.originY,
+					d:                 i.d,
+					z:                 i.z,
+					r:                 i.r,
+					g:                 i.g,
+					b:                 i.b,
+					alpha:             i.alpha,
+					renderable:        i.renderable,
+					roundTranslations: i.roundTranslations,
 				},
 			}
 
@@ -133,22 +135,23 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			w, h := a.Size()
 			tmpImage = &isoRendererImage{
 				img: &Image{
-					img:        a.getFrame(),
-					tx:         a.tx - a.originX*float64(w),
-					ty:         a.ty - a.originY*float64(h),
-					ox:         a.ox,
-					oy:         a.oy,
-					sx:         a.sx,
-					sy:         a.sy,
-					originX:    a.originX,
-					originY:    a.originY,
-					d:          a.d,
-					z:          a.z,
-					r:          a.r,
-					g:          a.g,
-					b:          a.b,
-					alpha:      a.alpha,
-					renderable: a.renderable,
+					img:               a.getFrame(),
+					tx:                a.tx - a.originX*float64(w),
+					ty:                a.ty - a.originY*float64(h),
+					ox:                a.ox,
+					oy:                a.oy,
+					sx:                a.sx,
+					sy:                a.sy,
+					originX:           a.originX,
+					originY:           a.originY,
+					d:                 a.d,
+					z:                 a.z,
+					r:                 a.r,
+					g:                 a.g,
+					b:                 a.b,
+					alpha:             a.alpha,
+					renderable:        a.renderable,
+					roundTranslations: a.roundTranslations,
 				},
 			}
 
@@ -171,7 +174,7 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 
 	for _, layer := range layers {
 		sort.SliceStable(layer, func(i, j int) bool {
-			var ty1, ty2 float64
+			var ty1, ty2 int
 
 			tileOverlap := layer[i].isTile || layer[j].isTile
 
@@ -179,24 +182,24 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 			_, h := img.Size()
 
 			if layer[i].isTile {
-				ty1 = img.ty + float64(h-layer[i].tileHeight/2)
+				ty1 = int(img.ty) + h - layer[i].tileHeight/2
 			} else {
 				if tileOverlap {
 					h /= 2
 				}
-				ty1 = img.ty + float64(h)
+				ty1 = int(img.ty) + h
 			}
 
 			img = layer[j].img
 			_, h = img.Size()
 
 			if layer[j].isTile {
-				ty2 = img.ty + float64(h-layer[j].tileHeight/2)
+				ty2 = int(img.ty) + h - layer[j].tileHeight/2
 			} else {
 				if tileOverlap {
 					h /= 2
 				}
-				ty2 = img.ty + float64(h)
+				ty2 = int(img.ty) + h
 			}
 
 			return ty1 < ty2
@@ -223,9 +226,14 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 				img.originY*float64(h),
 			)
 
+			x, y := img.tx+img.ox, img.ty+img.oy
+			if img.roundTranslations {
+				x, y = math.Round(x), math.Round(y)
+			}
+
 			op.GeoM.Translate(
-				img.tx+img.ox-cx,
-				img.ty+img.oy-cy,
+				x-cx,
+				y-cy,
 			)
 
 			op.ColorM.Scale(img.r, img.g, img.b, img.alpha)

@@ -35,14 +35,15 @@ func (a *Atlas) GetImage(k string) engine.Image {
 	)
 
 	cacheImg := Image{
-		img:        img.(*ebiten.Image),
-		sx:         1,
-		sy:         1,
-		r:          1,
-		g:          1,
-		b:          1,
-		alpha:      1,
-		renderable: true,
+		img:               img.(*ebiten.Image),
+		sx:                1,
+		sy:                1,
+		r:                 1,
+		g:                 1,
+		b:                 1,
+		alpha:             1,
+		renderable:        true,
+		roundTranslations: true,
 	}
 	a.cache[k] = cacheImg
 

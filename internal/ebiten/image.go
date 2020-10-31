@@ -18,8 +18,9 @@ type Image struct {
 
 	z int
 
-	renderable bool
-	disposed   bool
+	renderable        bool
+	roundTranslations bool
+	disposed          bool
 }
 
 // Translate sets the image translation.
@@ -75,6 +76,12 @@ func (i *Image) IsRenderable() bool {
 // Size returns the image size.
 func (i *Image) Size() (int, int) {
 	return i.img.Size()
+}
+
+// Round translations sets whether or not
+// image translations will be rounded during rendering.
+func (i *Image) RoundTranslations(round bool) {
+	i.roundTranslations = round
 }
 
 // Dispose marks the image to be disposed.

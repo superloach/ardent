@@ -46,6 +46,12 @@ type Image interface {
 	// an image should be renderered.
 	IsRenderable() bool
 
+	// RoundTranslations sets the rounding state
+	// for image translations. If set to true, image
+	// translations are rounded to the nearest integer.
+	// Defaults to true.
+	RoundTranslations(bool)
+
 	// Size returns the size of the image.
 	Size() (int, int)
 

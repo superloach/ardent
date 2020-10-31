@@ -34,14 +34,15 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 	case common.AssetTypeImage:
 		img, _ := ebiten.NewImageFromImage(ca.Img, ebiten.FilterDefault)
 		a.img = Image{
-			img:        img,
-			sx:         1,
-			sy:         1,
-			r:          1,
-			g:          1,
-			b:          1,
-			alpha:      1,
-			renderable: true,
+			img:               img,
+			sx:                1,
+			sy:                1,
+			r:                 1,
+			g:                 1,
+			b:                 1,
+			alpha:             1,
+			renderable:        true,
+			roundTranslations: true,
 		}
 	case common.AssetTypeAtlas:
 		img, _ := ebiten.NewImageFromImage(ca.Img, ebiten.FilterDefault)
@@ -54,14 +55,15 @@ func (a *Asset) UnmarshalBinary(data []byte) error {
 		img, _ := ebiten.NewImageFromImage(ca.Img, ebiten.FilterDefault)
 		a.animation = Animation{
 			Image: Image{
-				img:        img,
-				sx:         1,
-				sy:         1,
-				r:          1,
-				g:          1,
-				b:          1,
-				alpha:      1,
-				renderable: true,
+				img:               img,
+				sx:                1,
+				sy:                1,
+				r:                 1,
+				g:                 1,
+				b:                 1,
+				alpha:             1,
+				renderable:        true,
+				roundTranslations: true,
 			},
 			w:     ca.AnimWidth,
 			h:     ca.AnimHeight,

@@ -34,6 +34,8 @@ func (i Image) IsRenderable() bool {
 
 func (i Image) Alpha(alpha float64) {}
 
+func (i Image) RoundTranslations(round bool) {}
+
 // Size returns the image size.
 func (i Image) Size() (int, int) {
 	return 0, 0
