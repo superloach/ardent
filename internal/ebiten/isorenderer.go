@@ -174,32 +174,24 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 
 	for _, layer := range layers {
 		sort.SliceStable(layer, func(i, j int) bool {
-			var ty1, ty2 int
-
-			tileOverlap := layer[i].isTile || layer[j].isTile
+			var ty1, ty2 float64
 
 			img := layer[i].img
 			_, h := img.Size()
 
 			if layer[i].isTile {
-				ty1 = int(img.ty) + h - layer[i].tileHeight/2
+				ty1 = img.ty + float64(h-layer[i].tileHeight/4)
 			} else {
-				if tileOverlap {
-					h /= 2
-				}
-				ty1 = int(img.ty) + h
+				ty1 = img.ty + float64(h)
 			}
 
 			img = layer[j].img
 			_, h = img.Size()
 
 			if layer[j].isTile {
-				ty2 = int(img.ty) + h - layer[j].tileHeight/2
+				ty2 = img.ty + float64(h-layer[j].tileHeight/4)
 			} else {
-				if tileOverlap {
-					h /= 2
-				}
-				ty2 = int(img.ty) + h
+				ty2 = img.ty + float64(h)
 			}
 
 			return ty1 < ty2
