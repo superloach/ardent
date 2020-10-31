@@ -33,16 +33,6 @@ func (a *Animation) SetTickCount(count int) {
 	fps := a.anims[a.state].Fps
 
 	a.frameCounter = uint16(count) / (60 / fps)
-
-	/*
-		if a.fpsCounter == 60/fps {
-			a.frameCounter++
-			a.fpsCounter = 0
-			return
-		}
-
-		a.fpsCounter++
-	*/
 }
 
 func (a *Animation) Play() {
@@ -86,7 +76,12 @@ func (a *Animation) getFrame() *ebiten.Image {
 	if !anim.Loop && a.frameCounter >= anim.End-anim.Start {
 		frameKey = anim.End
 	} else {
-		frameKey = (a.frameCounter % (anim.End - anim.Start)) + anim.Start
+		length := anim.End - anim.Start
+		if length > 0 {
+			frameKey = (a.frameCounter % length) + anim.Start
+		} else {
+			frameKey = anim.Start
+		}
 	}
 
 	frame, ok := a.cache[frameKey]
