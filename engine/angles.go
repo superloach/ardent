@@ -30,17 +30,11 @@ var CardinalToAngle = map[byte]float64{
 	NW: math.Pi + math.Pi/6 - diag, // 206.565,
 }
 
+var intervalToCardinal = [8]byte{
+	E, SE, S, SW, W, NW, N, NE,
+}
+
 func AngleToCardinal(angle float64) byte {
-	var cardinal byte
-	closest := math.MaxFloat64
-
-	for k, v := range CardinalToAngle {
-		diff := math.Abs(angle - v)
-		if diff < math.Abs(closest) {
-			cardinal = k
-			closest = diff
-		}
-	}
-
-	return cardinal
+	interval := (int(math.Round(angle/(2*math.Pi/8))) + 8) % 8
+	return intervalToCardinal[interval]
 }
