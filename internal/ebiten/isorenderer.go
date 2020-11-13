@@ -1,6 +1,7 @@
 package ebiten
 
 import (
+	"image"
 	"math"
 	"sort"
 
@@ -213,13 +214,17 @@ func (r *IsoRenderer) draw(screen *ebiten.Image) {
 					continue
 				}
 
-				ax := tmpImage.img.tx + tmpImage.img.ox
-				ay := tmpImage.img.ty + tmpImage.img.oy
+				ax := int(tmpImage.img.tx + tmpImage.img.ox)
+				ay := int(tmpImage.img.ty + tmpImage.img.oy)
+				aw, ah := tmpImage.img.Size()
 
-				bx, by := tile.img.tx, tile.img.ty
+				bx, by := int(tile.img.tx), int(tile.img.ty)
 				bw, bh := tile.img.Size()
 
-				if ax >= bx && ax < bx+float64(bw) && ay >= by && ay < by+float64(bh) {
+				rect1 := image.Rect(ax, ay, ax+aw, ay+ah)
+				rect2 := image.Rect(bx, by, bx+bw, by+bh)
+
+				if rect1.Overlaps(rect2) {
 					eventState := r.tileEventStates[tile.tilePos]
 
 					if !eventState.complete {
