@@ -45,9 +45,39 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
 
 	layers := make([][]*isoRendererImage, len(data))
 
+	centerX, centerY := r.tilemap.IsoToIndex(
+		cx+float64(r.w/2),
+		cy+float64(r.h/2),
+	)
+	centerX, centerY = int(math.Max(float64(centerX), 0)), int(math.Max(float64(centerY), 0))
+
+	vdim := math.Max(
+		float64(r.w),
+		float64(r.h),
+	) / (float64(tw) * 0.55)
+
+	jmin := int(math.Max(
+		math.Max(float64(centerX), 0)-vdim,
+		0,
+	))
+	kmin := int(math.Max(
+		math.Max(float64(centerY), 0)-vdim,
+		0,
+	))
+
 	for i := 0; i < len(data); i++ {
-		for j := 0; j < len(data[i]); j++ {
-			for k := 0; k < len(data[i][j]); k++ {
+		jmax := int(math.Min(
+			float64(len(data[i])),
+			vdim+float64(centerX),
+		))
+
+		for j := jmin; j < jmax; j++ {
+			kmax := int(math.Min(
+				float64(len(data[i][j])),
+				vdim+float64(centerY),
+			))
+
+			for k := kmin; k < kmax; k++ {
 				x, y := r.tilemap.IndexToIso(j, k)
 				x -= float64(tw / 2)
 				y -= float64(tw)
@@ -57,17 +87,9 @@ func (r *IsoRenderer) tilemapToIsoLayers(cx, cy float64) [][]*isoRendererImage {
 					continue
 				}
 
-				w, h := img.Size()
+				_, h := img.Size()
 				if i != 0 {
 					y -= float64(h - tw/4)
-				}
-
-				if x-cx < -float64(w) || x-cx > float64(r.w+w) {
-					continue
-				}
-
-				if y-cy < -float64(h) || y-cy > float64(r.h+h) {
-					continue
 				}
 
 				layers[i] = append(layers[i], &isoRendererImage{
