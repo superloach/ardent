@@ -7,12 +7,10 @@ on:
     branches: [ master ]
 
 jobs:
-
-  checkes:
+  checks:
     name: Checks
     runs-on: ubuntu-latest
     steps:
-
     - name: Set up Go 1.15
       uses: actions/setup-go@v2
       with:
@@ -21,17 +19,19 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Get dependencies
-      run: |
-        sudo apt-get install libgl1-mesa-dev
-        go get -v -t -d ./...
+    - name: Run golangci-lint
+      uses: golangci/golangci-lint-action@v1.2.1
+      env:
+        ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      with:
+        version: v1.30
+        args: --build-tags headless
 
-    # - name: Build
-    #   run: go build -v ./...
+    - name: Get dependencies
+      run: go get -tags headless -v -t -d ./...
+
+    - name: Build
+      run: go build -tags headless -v ./...
 
     - name: Test
-      run: go test -v ./...
-    
-    - name: golangci-lint
-      uses: actions-contrib/golangci-lint@v1
-
+      run: go test -tags headless -v ./...
