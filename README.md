@@ -15,4 +15,4 @@ Alongside basic features such as user input and rendering, Ardent offers a few k
 
 ## Discord
 
-Come chat with us in the `#ardent` channel on ![Discord](https://discord.gg/dUqS7RfSqv)!
+Come chat with us in the `#ardent` channel on [Discord](https://discord.gg/dUqS7RfSqv)!
