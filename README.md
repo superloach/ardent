@@ -1,5 +1,5 @@
 # Ardent
-![Go Reference](https://pkg.go.dev/badge/github.com/split-cube-studios/ardent.svg)](https://pkg.go.dev/github.com/split-cube-studios/ardent) ![Go](https://github.com/split-cube-studios/ardent/workflows/Go/badge.svg)
+[![Go Reference](https://pkg.go.dev/badge/github.com/split-cube-studios/ardent.svg)](https://pkg.go.dev/github.com/split-cube-studios/ardent) ![Go](https://github.com/split-cube-studios/ardent/workflows/Go/badge.svg)
 
 Ardent is a cross-platform 2D game engine, initially developed for the game Ardent Woods.
 
