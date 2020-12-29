@@ -35,7 +35,9 @@ func tick() {
 	}
 
 	stripes.Translate(x, y)
-	camera.LookAt(x+float64(stripeWidth/2), y+float64(stripeHeight/2), 0)
+
+	// 0.05 lerp rate
+	camera.LookAt(x+float64(stripeWidth/2), y+float64(stripeHeight/2), 0.05)
 }
 
 func main() {
