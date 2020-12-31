@@ -13,10 +13,7 @@ type Game struct {
 }
 
 // NewGame returns an instantiated game.
-func NewGame(
-	tickFunc func(),
-	layoutFunc func(int, int) (int, int),
-) *Game {
+func NewGame(tickFunc func()) *Game {
 	return &Game{
 		tickFunc: tickFunc,
 	}

@@ -3,6 +3,8 @@
 package ebiten
 
 import (
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/split-cube-studios/ardent/engine"
 )
@@ -10,12 +12,14 @@ import (
 // Game is an ebiten implementation
 // of engine.Game.
 type Game struct {
-	title string
-	w, h  int
-	flags byte
+	title  string
+	vw, vh int
+	w, h   int
+	ow, oh int
+	flags  byte
 
 	tickFunc   func()
-	layoutFunc func(int, int) (int, int)
+	layoutFunc engine.LayoutFunc
 
 	renderers []engine.Renderer
 
@@ -29,23 +33,27 @@ func NewGame(
 	w, h int,
 	flags byte,
 	tickFunc func(),
-	layoutFunc func(int, int) (int, int),
+	layoutFunc engine.LayoutFunc,
 ) *Game {
 	return &Game{
-		title:      title,
-		w:          w,
-		h:          h,
-		flags:      flags,
+		title: title,
+		vw:    w,
+		vh:    h,
+		w:     w,
+		h:     h,
+		flags: flags,
+
 		tickFunc:   tickFunc,
 		layoutFunc: layoutFunc,
-		component:  newComponent(),
+
+		component: newComponent(),
 	}
 }
 
 // Run starts up the engine and begins
 // running the game.
 func (g *Game) Run() error {
-	ebiten.SetWindowSize(g.w, g.h)
+	ebiten.SetWindowSize(g.vw, g.vh)
 	ebiten.SetWindowTitle(g.title)
 	ebiten.SetWindowResizable(g.flags&engine.FlagResizable > 0)
 	ebiten.SetRunnableOnUnfocused(g.flags&engine.FlagRunsInBackground > 0)
@@ -58,11 +66,43 @@ func (g *Game) AddRenderer(renderer ...engine.Renderer) {
 	g.renderers = append(g.renderers, renderer...)
 }
 
-// Layout is called when the window resizes.
+// Layout converts window size to screen size, using the Game's LayoutFunc.
+//
+// Some constraints are applied to work around ebiten quirks/bugs.
 func (g *Game) Layout(ow, oh int) (int, int) {
-	g.w, g.h = g.layoutFunc(ow, oh)
+	/*
+		// no resize happened
+		if ow == g.ow && oh == g.oh {
+			return ow, oh
+		}
 
-	return g.w, g.h
+		g.ow, g.oh = ow, oh
+	*/
+
+	w, h := g.layoutFunc(ow, oh, g.vw, g.vh)
+
+	if w < 1 {
+		w = 1
+	}
+
+	if h < 1 {
+		h = 1
+	}
+
+	// to avoid a panic in ebiten related to opengl
+	const openglMax = 16384
+
+	if w > openglMax {
+		w = openglMax
+	}
+
+	if h > openglMax {
+		h = openglMax
+	}
+
+	g.w, g.h = w, h
+
+	return w, h
 }
 
 // Update runs the tick functions.
@@ -79,6 +119,7 @@ func (g *Game) Update() error {
 // Draw runs the draw functions.
 func (g *Game) Draw(screen *ebiten.Image) {
 	for _, renderer := range g.renderers {
+		log.Println("set viewport", g.w, g.h)
 		renderer.SetViewport(g.w, g.h)
 
 		switch r := renderer.(type) {

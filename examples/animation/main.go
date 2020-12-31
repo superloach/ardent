@@ -15,11 +15,13 @@ var (
 )
 
 func main() {
+	const w = 57 * 4
+	const h = 65 * 4
+
 	// create new game instance
 	game := ardent.NewGame(
 		"Animation",
-		854,
-		480,
+		w, h, // 854, 480,
 		engine.FlagResizable,
 		// tick function
 		func() {
@@ -30,10 +32,8 @@ func main() {
 			}
 			counter++
 		},
-		// layout function
-		func(ow, oh int) (int, int) {
-			return ow, oh
-		},
+		// layout handler
+		engine.LayoutFill,
 	)
 
 	// create new renderer and animation

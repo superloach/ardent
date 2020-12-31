@@ -12,12 +12,11 @@ func newGame(
 	w, h int,
 	flags byte,
 	tickFunc func(),
-	layoutFunc func(int, int) (int, int),
+	layoutFunc engine.LayoutFunc,
 ) engine.Game {
 	return ebiten.NewGame(
 		title,
-		w,
-		h,
+		w, h,
 		flags,
 		tickFunc,
 		layoutFunc,

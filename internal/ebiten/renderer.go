@@ -5,6 +5,7 @@ package ebiten
 import (
 	"fmt"
 	"image"
+	"log"
 	"math"
 	"sort"
 
@@ -105,16 +106,22 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 		alpha            float64
 	)
 
+	ssx, ssy := screen.Size()
+	log.Println("screen size", ssx, ssy)
+
 	if r.camera != nil {
 		cx, cy = r.camera.Position()
 		cx, cy = cx-float64(r.w/2), cy-float64(r.h/2)
 	}
+	log.Println("camera", cx, cy)
 
 	vp := r.Viewport()
 	pos := engine.Vec2{
 		X: float64(vp.Min.X + (vp.Max.X-vp.Min.X)/2),
 		Y: float64(vp.Min.Y + (vp.Max.Y-vp.Min.Y)/2),
 	}
+	log.Println("vp min", vp.Min.X, vp.Min.Y)
+	log.Println("vp max", vp.Max.X, vp.Max.Y)
 	r.partitionMap.Tick(
 		pos,
 		5,
@@ -160,6 +167,7 @@ func (r *Renderer) draw(screen *ebiten.Image) {
 
 				w, h := eimg.Size()
 
+				log.Println("scale", sx, sy)
 				op.GeoM.Scale(sx, sy)
 				op.GeoM.Translate(
 					-originX*float64(w),

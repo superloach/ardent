@@ -19,9 +19,7 @@ func main() {
 		// tick function
 		func() {},
 		// layout function
-		func(ow, oh int) (int, int) {
-			return ow, oh
-		},
+		engine.LayoutAspect{854, 480},
 	)
 
 	// create new renderer

@@ -12,10 +12,7 @@ func newGame(
 	w, h int,
 	flags byte,
 	tickFunc func(),
-	layoutFunc func(int, int) (int, int),
+	layout engine.LayoutHandler,
 ) engine.Game {
-	return headless.NewGame(
-		tickFunc,
-		nil,
-	)
+	return headless.NewGame(tickFunc)
 }
